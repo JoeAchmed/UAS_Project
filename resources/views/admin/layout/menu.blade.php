@@ -71,7 +71,7 @@
   <ul class="menu-inner py-1">
     <!-- Dashboard -->
     <li class="menu-item @if(Request::url() == route('admin.dashboard')) active @endif">
-      <a href="{{ url('/') }}" class="menu-link">
+      <a href="{{ url('/dashboard') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-home-circle"></i>
         <div data-i18n="Analytics">Dashboard</div>
       </a>

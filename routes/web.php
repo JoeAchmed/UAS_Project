@@ -13,7 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Client
 Route::get('/', function () {
+    return view('client.home');
+});
+
+Route::get('/cart', function () {
+    return view('client.cart');
+});
+
+Route::get('/checkout', function () {
+    return view('client.checkout');
+});
+
+Route::get('/products', function () {
+    return view('client.products');
+});
+
+Route::get('/product/detail', function () {
+    return view('client.product-detail');
+});
+
+// Dashboard
+Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 
