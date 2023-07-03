@@ -340,6 +340,13 @@
 		});
 	});
 
+	// Loading
+	$("div.wrapper-loading").addClass("show");
+
+	setTimeout(function () {
+		$("div.wrapper-loading").removeClass("show");
+	}, 2000);
+
 	// Popup up
     setTimeout(function () {
         $('.popup_wrapper').css({
@@ -350,6 +357,5 @@
             $(".popup_wrapper").fadeOut(300);
         })
     }, 1500);
-	
 
 })(window.jQuery); 

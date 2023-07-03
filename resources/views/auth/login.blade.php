@@ -5,7 +5,7 @@
     <div class="card-body">
       <!-- Logo -->
       <div class="app-brand justify-content-center">
-        <a href="index.html" class="app-brand-link gap-2">
+        <a href="{{ url('/') }}" class="app-brand-link gap-2">
           <span class="app-brand-logo demo">
             <svg
               width="25"
@@ -68,7 +68,7 @@
       <h4 class="mb-2">Welcome to Sneat! 👋</h4>
       <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-      <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+      <form id="formAuthentication" class="mb-3" action="{{ url('/') }}" method="POST">
         <div class="mb-3">
           <label for="email" class="form-label">Email or Username</label>
           <input

@@ -170,7 +170,7 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon off">-30%</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/1.jpg') }}" alt="">
                       </a>
                       <div data-countdown="2019/05/15" class="countdown"></div>
@@ -178,7 +178,7 @@
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Air x Fear</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -198,7 +198,7 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon off">-30%</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/2.jpg') }}" alt="">
                       </a>
                       <div data-countdown="2019/05/15" class="countdown"></div>
@@ -206,7 +206,7 @@
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Okwahn II</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -226,7 +226,7 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon off">-50%</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/3.jpg') }}" alt="">
                       </a>
                       <div data-countdown="2019/05/15" class="countdown"></div>
@@ -234,7 +234,7 @@
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Air Wildwood ACG</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -254,14 +254,14 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon new">New</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/4.jpg') }}" alt="">
                       </a>
                   </figure>
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor ACG React Terra</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -280,14 +280,14 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon new">New</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/5.jpg') }}" alt="">
                       </a>
                   </figure>
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Air Zoom Alpha</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -306,14 +306,14 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon new">New</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/6.jpg') }}" alt="">
                       </a>
                   </figure>
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Air Alpha</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
@@ -332,14 +332,14 @@
               <div class="col-sm-4">
                   <figure>
                       <span class="ribbon hot">Hot</span>
-                      <a href="product-detail-1.html">
+                      <a href="{{ url('product/detail') }}">
                           <img class="img-fluid lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}" data-src="{{ asset('client/img/products/shoes/7.jpg') }}" alt="">
                       </a>
                   </figure>
               </div>
               <div class="col-sm-8">
                   <div class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i></div>
-                  <a href="product-detail-1.html">
+                  <a href="{{ url('product/detail') }}">
                       <h3>Armor Air 98</h3>
                   </a>
                   <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident...</p>
