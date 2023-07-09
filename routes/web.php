@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,31 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Client
-Route::get('/', function () {
-    return view('client.home');
-});
+Route::get('/', [ClientController::class, 'index']);
+Route::get('/cart', [ClientController::class, 'cart']);
+Route::get('/checkout', [ClientController::class, 'checkout']);
+Route::get('/products', [ClientController::class, 'products']);
+Route::get('/product/detail', [ClientController::class, 'productDetail']);
 
-Route::get('/cart', function () {
-    return view('client.cart');
-});
-
-Route::get('/checkout', function () {
-    return view('client.checkout');
-});
-
-Route::get('/products', function () {
-    return view('client.products');
-});
-
-Route::get('/product/detail', function () {
-    return view('client.product-detail');
-});
-
-// Dashboard
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-
+// auth
 Route::get('/login', function () {
     return view('auth.login');
 });
@@ -47,14 +32,25 @@ Route::get('/register', function () {
     return view('auth.register');
 });
 
-Route::get('/produk', function () {
-    return view('admin.produk.list');
-})->name('admin.produk.list');
+Route::group(['middleware' => ['auth']], function () {
+    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // // Buat Routing Produk
+    // Route::get('/produk', [ProdukController::class, 'index']);
+    // Route::get('/produk/create', [ProdukController::class, 'create']);
+    // Route::post('/produk/store', [ProdukController::class, 'store']);
+    // Route::get('produk/edit/{id}', [ProdukController::class, 'edit']);
+    // Route::put('/produk/update/{id}', [ProdukController::class, 'update']);
+    // Route::get('/produk/delete/{id}', [ProdukController::class, 'destroy']);
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
+    Route::get('/dashboard/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
+    Route::get('/dashboard/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
+    Route::get('/dashboard/user', [DashboardController::class, 'users'])->name('admin.user.list');
+});
 
-Route::get('/produk/kategori', function () {
-    return view('admin.produk.kategori');
-})->name('admin.produk.kategori');
 
-Route::get('/pesanan', function () {
-    return view('admin.pesanan.list');
-})->name('admin.pesanan.list');
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

@@ -2,7 +2,7 @@
 
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
   <div class="app-brand demo">
-    <a href="index.html" class="app-brand-link">
+    <a href="{{ url("/dashboard") }}" class="app-brand-link">
       <span class="app-brand-logo demo">
         <svg
           width="25"
@@ -86,12 +86,12 @@
 
       <ul class="menu-sub">
         <li class="menu-item @if(Request::url() == route('admin.produk.kategori')) active @endif">
-          <a href="{{ url('/produk/kategori') }}" class="menu-link">
+          <a href="{{ url('/dashboard/produk/kategori') }}" class="menu-link">
             <div data-i18n="Without menu">Kategori Produk</div>
           </a>
         </li>
         <li class="menu-item @if(Request::url() == route('admin.produk.list')) active @endif">
-          <a href="{{ url('/produk') }}" class="menu-link">
+          <a href="{{ url('/dashboard/produk') }}" class="menu-link">
             <div data-i18n="Without navbar">List Produk</div>
           </a>
         </li>
@@ -100,19 +100,20 @@
 
     <!-- Pesanan -->
     <li class="menu-item @if(Request::url() == route('admin.pesanan.list')) active @endif">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="{{ url('/dashboard/pesanan') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-cart"></i>
-        <div data-i18n="Layouts">Pesanan</div>
+        <div data-i18n="Without navbar">List Pesanan</div>
       </a>
-
-      <ul class="menu-sub">
-        <li class="menu-item @if(Request::url() == route('admin.pesanan.list')) active @endif">
-          <a href="{{ url('/pesanan') }}" class="menu-link">
-            <div data-i18n="Without navbar">List Pesanan</div>
-          </a>
-        </li>
-      </ul>
     </li>
+
+    <!-- Management User -->
+    <li class="menu-item @if(Request::url() == route('admin.user.list')) active @endif">
+      <a href="{{ url('/dashboard/user') }}" class="menu-link">
+        <i class="menu-icon tf-icons bx bx-user"></i>
+        <div data-i18n="Analytics">User Management</div>
+      </a>
+    </li>
+    
   </ul>
 </aside>
 <!-- / Menu -->

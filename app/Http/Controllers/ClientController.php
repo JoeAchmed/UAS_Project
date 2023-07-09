@@ -4,51 +4,51 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class ClientController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource home.
      */
     public function index()
     {
-        // menampilkan page dashboard admin
-        return view('admin.dashboard');
+        // menampilkan page home ecommerce
+        return view('client.home');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource cart.
      */
-    public function productList()
+    public function cart()
     {
-        // menampilkan page list produk admin
-        return view('admin.produk.list');
+        // menampilkan page cart ecommerce
+        return view('client.cart');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource checkouts.
      */
-    public function categoryProduct()
+    public function checkout()
     {
-        // menampilkan page kategori produk admin
-        return view('admin.produk.kategori');
+        // menampilkan page checkout ecommerce
+        return view('client.checkout');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource products.
      */
-    public function orders()
+    public function products()
     {
-        // menampilkan page pesanan admin
-        return view('admin.pesanan.list');
+        // menampilkan page products ecommerce
+        return view('client.products');
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource product detail.
      */
-    public function users()
+    public function productDetail()
     {
-        // menampilkan page pesanan admin
-        return view('admin.user.list');
+        // menampilkan page detail product ecommerce
+        return view('client.product-detail');
     }
 
     /**
