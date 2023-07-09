@@ -28,26 +28,21 @@ Route::get('/login', function () {
     return view('auth.login');
 });
 
+Route::get('/login-dbo', [DashboardController::class, 'login']);
+Route::post('/post-login-dbo', [DashboardController::class, 'postLogin']);
+
 Route::get('/register', function () {
     return view('auth.register');
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    // Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-    // // Buat Routing Produk
-    // Route::get('/produk', [ProdukController::class, 'index']);
-    // Route::get('/produk/create', [ProdukController::class, 'create']);
-    // Route::post('/produk/store', [ProdukController::class, 'store']);
-    // Route::get('produk/edit/{id}', [ProdukController::class, 'edit']);
-    // Route::put('/produk/update/{id}', [ProdukController::class, 'update']);
-    // Route::get('/produk/delete/{id}', [ProdukController::class, 'destroy']);
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/dashboard/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
-    Route::get('/dashboard/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
-    Route::get('/dashboard/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
-    Route::get('/dashboard/user', [DashboardController::class, 'users'])->name('admin.user.list');
+    Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dbo/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
+    Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
+    Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
+    Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
 });
 
 

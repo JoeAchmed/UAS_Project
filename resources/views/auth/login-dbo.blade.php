@@ -1,6 +1,6 @@
 @extends('auth.layout.main')
 @section('content')
-    <!-- Register -->
+    <!-- Login -->
     <div class="card">
         <div class="card-body">
             <!-- Logo -->
@@ -54,27 +54,16 @@
                 </a>
             </div>
             <!-- /Logo -->
-            <h4 class="mb-2">Adventure starts here 🚀</h4>
-            <p class="mb-4">Make your app management easy and fun!</p>
+            <h4 class="mb-2">Welcome admin! 👋</h4>
+            <p class="mb-4">Please sign-in to your account and start the adventure</p>
 
-            <form id="formAuthentication" class="mb-3" action="{{ route('register') }}" method="POST">
+            <form id="formAuthentication" class="mb-3" action="{{ url('/post-login-dbo') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="name" class="form-label">{{ __('Name') }}</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
-                        name="name" placeholder="Enter your name" value="{{ old('name') }}" required
-                        autocomplete="name" autofocus />
-                    @error('name')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="mb-3">
                     <label for="email" class="form-label">{{ __('Email Address') }}</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                        name="email" value="{{ old('email') }}" required autocomplete="email"
-                        placeholder="Enter your email" />
+                    <input type="email" class="form-control @error('email') is-invalid @enderror"
+                        placeholder="Enter your email" id="email" name="email" value="{{ old('email') }}" required
+                        autocomplete="email" autofocus />
                     @error('email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -82,12 +71,17 @@
                     @enderror
                 </div>
                 <div class="mb-3 form-password-toggle">
-                    <label class="form-label" for="password">{{ __('Password') }}</label>
+                    <div class="d-flex justify-content-between">
+                        <label class="form-label" for="password">Password</label>
+                        <a href="auth-forgot-password-basic.html">
+                            <small>Forgot Password?</small>
+                        </a>
+                    </div>
                     <div class="input-group input-group-merge">
                         <input type="password" id="password" class="form-control @error('password') is-invalid @enderror"
                             name="password"
                             placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                            aria-describedby="password" required autocomplete="new-password" />
+                            aria-describedby="password" required autocomplete="current-password" />
                         <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                         @error('password')
                             <span class="invalid-feedback" role="alert">
@@ -96,36 +90,25 @@
                         @enderror
                     </div>
                 </div>
-
-                <div class="mb-3 form-password-toggle">
-                  <label class="form-label" for="password-confirm">{{ __('Confirm Password') }}</label>
-                  <div class="input-group input-group-merge">
-                      <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password"
-                          placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                          aria-describedby="password-confirm" />
-                      <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
-                  </div>
-              </div>
-
                 <div class="mb-3">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms" />
-                        <label class="form-check-label" for="terms-conditions">
-                            I agree to
-                            <a href="javascript:void(0);">privacy policy & terms</a>
-                        </label>
+                        <input class="form-check-input" type="checkbox" id="remember" name="remember"
+                            {{ old('remember') ? 'checked' : '' }} />
+                        <label class="form-check-label" for="remember"> {{ __('Remember Me') }} </label>
                     </div>
                 </div>
-                <button class="btn btn-primary d-grid w-100">{{ __('Register') }}</button>
+                <div class="mb-3">
+                    <button class="btn btn-primary d-grid w-100" type="submit"> {{ __('Login') }}</button>
+                </div>
             </form>
 
             <p class="text-center">
-                <span>Already have an account?</span>
-                <a href="{{ url('/login') }}">
-                    <span>Sign in instead</span>
+                <span>New on our platform?</span>
+                <a href="{{ url('/register') }}">
+                    <span>Create an account</span>
                 </a>
             </p>
         </div>
     </div>
-    <!-- Register -->
+    <!-- /Login -->
 @endsection

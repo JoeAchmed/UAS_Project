@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -13,6 +15,47 @@ class DashboardController extends Controller
     {
         // menampilkan page dashboard admin
         return view('admin.dashboard');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function login()
+    {
+        // show login-dbo
+        return view('auth.login-dbo');
+    }
+
+    /**
+     * POST login admin
+     */
+    public function postLogin(Request $request)
+    {
+        // show login-dbo
+        // return view('auth.login-dbo');
+        $email = $request->email;
+        $password = $request->password;
+
+        // $user = User::where('email', $email)->get();
+        $user = User::where('email', '=', $email)->first();
+        // Hash::check('INPUT PASSWORD', $user->password);
+
+        // $hashedPassword = Hash::make($password);
+
+        if ($user->role == 'admin') {
+            
+        }
+
+        if (Hash::check($password, $user->password)) {
+            // Password matches
+            // Add your desired logic here
+            dd('ok ');
+
+        } else {
+            // Password does not match
+            // Add your desired logic here
+            dd('gagal ');
+        }
     }
 
     /**

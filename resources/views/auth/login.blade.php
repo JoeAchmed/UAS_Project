@@ -99,17 +99,12 @@
                 </div>
                 <div class="mb-3">
                     <button class="btn btn-primary d-grid w-100" type="submit"> {{ __('Login') }}</button>
-                    @if (Route::has('password.request'))
-                        <a class="btn btn-link" href="{{ route('password.request') }}">
-                            {{ __('Forgot Your Password?') }}
-                        </a>
-                    @endif
                 </div>
             </form>
 
             <p class="text-center">
                 <span>New on our platform?</span>
-                <a href="auth-register-basic.html">
+                <a href="{{ url('/register') }}">
                     <span>Create an account</span>
                 </a>
             </p>

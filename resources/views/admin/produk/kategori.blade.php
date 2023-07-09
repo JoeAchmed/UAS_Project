@@ -2,7 +2,7 @@
 @section('content')
 
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dashboard') }}">Dashboard</a> /</span> Kategori Produk
+    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> /</span> Kategori Produk
 @endsection
 
 <!-- Hoverable Table rows -->
