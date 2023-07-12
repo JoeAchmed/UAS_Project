@@ -45,6 +45,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/cart', [ClientController::class, 'carts']);
     Route::get('/checkout', [ClientController::class, 'checkout']);
     Route::post('/update-quantity', [ClientController::class, 'updateQty'])->name('update.quantity');
+    Route::post('/product/delete', [ClientController::class, 'destroyProduct'])->name('delete.product');
 });
 
 

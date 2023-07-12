@@ -62,14 +62,16 @@
                                     <div class="numbers-row">
                                         <form method="POST">
                                             @csrf
-                                            <input type="number" min="{{ $item->quantity }}" value="{{ $item->quantity }}" class="qty2" name="quantity_1" onclick="increase({})" />
-                                            <div class="inc button_inc">+</div>
-                                            <div class="dec button_inc">-</div>
+                                            <input type="number" id="quantity_{{ $item->id }}"
+                                                min="{{ $item->quantity }}" value="{{ $item->quantity }}" class="qty2"
+                                                name="quantity_{{ $item->id }}" max="100" style="width: 64px" />
+                                            <div data-id="{{ $item->id }}" class="inc button_inc">+</div>
+                                            <div data-id="{{ $item->id }}" class="dec button_inc">-</div>
                                         </form>
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <strong>
+                                    <div id="item_total{{ $item->id }}">
                                         Rp
                                         @if ($item->quantity)
                                             @if ($item->discount)
@@ -80,14 +82,20 @@
                                         @else
                                             &nbsp; 0
                                         @endif
-                                    </strong>
+                                    </div>
                                 </td>
                                 <td class="options">
-                                    <a href="#"><i class="ti-trash"></i></a>
+                                    <form method="POST" action="{{ route('delete.product') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $item->id }}" id="id">
+                                        <button class="btn-delete" type="submit"
+                                            onclick="return confirm('Anda yakin akan menghapus produk ini ?')">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         @endforeach
-                    @else
                     @endif
                 </tbody>
             </table>
@@ -127,10 +135,11 @@
                         <ul>
                             <li>
                                 <span>Subtotal</span>
-                                Rp {{ number_format($subtotal, 0, ',', '.') }}
+                                <div id="subtotal_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
                             </li>
                             <li><span>Shipping</span> Rp 0</li>
-                            <li><span>Total</span> Rp {{ number_format($subtotal, 0, ',', '.') }}</li>
+                            <li><span>Total</span> <div
+                                    id="total_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div></li>
                         </ul>
                         <a href="{{ url('/checkout') }}" class="btn_1 full-width cart">Proceed to Checkout</a>
                     </div>
@@ -145,29 +154,52 @@
     integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        var valueQty = document.getElementById("quantity_1").value || 0;
+        var flag = "inc";
+        var order_id = 0;
+        var loading = false;
+        var qty = 0;
 
         // Event listener untuk tombol "+"
         $(".inc").on("click", function(e) {
             e.preventDefault();
-            valueQty = Number(valueQty) + 1;
-            updateQuantity(valueQty);
+            var itemId = this.getAttribute('data-id');
+
+            if (!loading) {
+                flag = "inc";
+                qty = document.getElementById('quantity_' + itemId).value;
+                order_id = itemId;
+                qty++;
+                document.getElementById('quantity_' + itemId).value = qty;
+                updateQuantity();
+            }
         });
 
-        $(".desc").on("click", function(e) {
+        $(".dec").on("click", function(e) {
             e.preventDefault();
 
+            var itemId = this.getAttribute('data-id');
+            qty = document.getElementById('quantity_' + itemId).value;
+
             // Hindari pengurangan ketika sudah mencapai nilai minimum
-            if (valueQty > 1) {
-                updateQuantity(valueQty - 1);
+            if (Number(qty || 0) > 1 && !loading) {
+                flag = "dec";
+                order_id = itemId;
+                qty--;
+                document.getElementById('quantity_' + itemId).value = qty;
+                updateQuantity();
             }
         });
 
         // Fungsi untuk mengirim permintaan Ajax
-        function updateQuantity(quantity) {
+        function updateQuantity() {
             var url = "{{ route('update.quantity') }}";
             var formData = new FormData();
-            formData.append('quantity', quantity);
+            formData.append('action', flag);
+            formData.append('cart_item_id', {{ $cart_item->id }});
+            formData.append('order_id', order_id);
+            formData.append('qty', qty);
+            loading = true;
+            $("div.wrapper-loading").addClass("show");
 
             fetch(url, {
                     method: 'POST',
@@ -179,6 +211,12 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        loading = false;
+                        $("div.wrapper-loading").removeClass("show");
+                        console.log(data, "check berhasil");
+                        document.getElementById("item_total" + order_id).innerHTML = "Rp " + (data.response.price * qty).toLocaleString("ID");
+                        document.getElementById("subtotal_cart").innerHTML =  "Rp " + (data.response.subtotal).toLocaleString("ID");
+                        document.getElementById("total_cart").innerHTML =  "Rp " + (data.response.subtotal).toLocaleString("ID");
                         // Berhasil mengupdate quantity, tambahkan kode lain jika perlu
                     } else {
                         // Gagal mengupdate quantity, tambahkan kode lain jika perlu
@@ -186,6 +224,9 @@
                 })
                 .catch(error => {
                     console.error(error);
+                    loading = false;
+                    $("div.wrapper-loading").removeClass("show");
+
                     // Tangani kesalahan jika terjadi
                 });
         }

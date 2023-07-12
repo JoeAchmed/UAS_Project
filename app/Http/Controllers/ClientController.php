@@ -85,7 +85,7 @@ class ClientController extends Controller
     {
         $cart_item = CartClient::getUserCart(auth()->user()->id);
         // menampilkan page pesanan admin
-        $list_cart = CartItemClient::getCartItems($cart_item->id);
+        $list_cart = CartItemClient::getCartItems($cart_item->id)->where('status', 1);
 
         // Menampilkan page cart ecommerce
         $subtotal = 0; // Initialize $subtotal variable
@@ -103,22 +103,57 @@ class ClientController extends Controller
             }
         }
 
-        return view('client.cart', compact(['list_cart', 'subtotal']));
+        return view('client.cart', compact(['list_cart', 'subtotal', 'cart_item']));
     }
 
     public function updateQty(Request $request)
     {
         // Ambil data dari permintaan Ajax
-        $quantity = $request->input('quantity');
+        $action = $request->input('action');
+        $cart_item_id = $request->input('cart_item_id');
+        $order_id = $request->input('order_id');
+        $qty = $request->input('qty');
 
+        $orders = CartItemClient::find($order_id);
+        $list_cart = CartItemClient::getCartItems($cart_item_id)->where('status', 1);
+        $product = ProductClient::find($orders->prod_id);
+        $orders->quantity = $qty;
+        $price = 0;
 
-        // Lakukan validasi atau manipulasi data sesuai kebutuhan
+        if ($product) {
+            if($product->discount) {
+                $price = $product->discount_price;
+            } else {
+                $price = $product->sell_price;
+            }
+        }
 
-        // Contoh: Simpan data quantity ke database
-        // Item::where('id', $itemId)->update(['quantity' => $quantity]);
+        $subtotal = 0; // Initialize $subtotal variable
 
-        // Kirim response berupa JSON
-        return response()->json(['success' => true, 'quantity' => $quantity]);
+        if ($list_cart) {
+            foreach ($list_cart as $item) {
+                // Calculate subtotal
+                if ($item->quantity) {
+                    if ($item->discount) {
+                        $subtotal += $item->discount_price * $item->quantity;
+                    } else {
+                        $subtotal += $item->sell_price * $item->quantity;
+                    }
+                }
+            }
+        }
+
+        $orders->save();
+
+        return response()->json(['success' => true, 'response' => [
+            'action' => $action,
+            'cart_item_id' => $cart_item_id,
+            'order_id' => $order_id,
+            'qty' => $qty,
+            'orders' => $orders,
+            'price' => $price,
+            'subtotal' => $subtotal,
+        ]]);
     }
 
     // public function addToCart(Request $request, CartItemClient $param)
@@ -172,8 +207,14 @@ class ClientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroyProduct(Request $request)
     {
-        //
+        // 
+        $id = $request->id;
+        $cart_items = CartItemClient::find($id);
+        $cart_items->status = 0;
+        $cart_items->save();
+
+        return redirect('cart')->with('success', 'Produk berhasil dihapus');
     }
 }
