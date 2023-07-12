@@ -62,8 +62,7 @@
                                     <div class="numbers-row">
                                         <form method="POST">
                                             @csrf
-                                            <input type="number" min="{{ $item->quantity }}" value="{{ $item->quantity }}"
-                                                id="quantity_1" class="qty2" name="quantity_1" />
+                                            <input type="number" min="{{ $item->quantity }}" value="{{ $item->quantity }}" class="qty2" name="quantity_1" onclick="increase({})" />
                                             <div class="inc button_inc">+</div>
                                             <div class="dec button_inc">-</div>
                                         </form>
@@ -146,51 +145,49 @@
     integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        // var valueQty = document.getElementById("quantity_1").value || 0;
+        var valueQty = document.getElementById("quantity_1").value || 0;
 
-        // // Event listener untuk tombol "+"
-        // $(".inc").on("click", function(e) {
-        //     e.preventDefault();
-        //     valueQty = Number(valueQty) + 1;
-        //     console.log(valueQty, "checlk");
-        //     updateQuantity(valueQty);
-        // });
+        // Event listener untuk tombol "+"
+        $(".inc").on("click", function(e) {
+            e.preventDefault();
+            valueQty = Number(valueQty) + 1;
+            updateQuantity(valueQty);
+        });
 
-        // $(".desc").on("click", function(e) {
-        //     e.preventDefault();
+        $(".desc").on("click", function(e) {
+            e.preventDefault();
 
-        //     // Hindari pengurangan ketika sudah mencapai nilai minimum
-        //     if (valueQty > 1) {
-        //         updateQuantity(valueQty - 1);
-        //     }
-        // });
+            // Hindari pengurangan ketika sudah mencapai nilai minimum
+            if (valueQty > 1) {
+                updateQuantity(valueQty - 1);
+            }
+        });
 
-        // // Fungsi untuk mengirim permintaan Ajax
-        // function updateQuantity(quantity) {
-        //     var url = "{{ route('update.quantity') }}";
-        //     var formData = new FormData();
-        //     formData.append('quantity', quantity);
+        // Fungsi untuk mengirim permintaan Ajax
+        function updateQuantity(quantity) {
+            var url = "{{ route('update.quantity') }}";
+            var formData = new FormData();
+            formData.append('quantity', quantity);
 
-        //     fetch(url, {
-        //             method: 'POST',
-        //             body: formData,
-        //             headers: {
-        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
-        //             }
-        //         })
-        //         .then(response => response.json())
-        //         .then(data => {
-        //             if (data.success) {
-        //                 // Berhasil mengupdate quantity, tambahkan kode lain jika perlu
-        //             } else {
-        //                 // Gagal mengupdate quantity, tambahkan kode lain jika perlu
-        //             }
-        //         })
-        //         .catch(error => {
-        //             console.error(error);
-        //             // Tangani kesalahan jika terjadi
-        //         });
-        // }
-        
+            fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Berhasil mengupdate quantity, tambahkan kode lain jika perlu
+                    } else {
+                        // Gagal mengupdate quantity, tambahkan kode lain jika perlu
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Tangani kesalahan jika terjadi
+                });
+        }
     });
 </script>
