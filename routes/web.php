@@ -18,10 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 // Client
 Route::get('/', [ClientController::class, 'index']);
-Route::get('/cart', [ClientController::class, 'cart']);
-Route::get('/checkout', [ClientController::class, 'checkout']);
 Route::get('/products', [ClientController::class, 'products']);
-Route::get('/product/detail', [ClientController::class, 'productDetail']);
+Route::get('/product/detail/{param:slug}', [ClientController::class, 'productDetail'])->name('product_detail');
 
 // auth
 Route::get('/login', function () {
@@ -43,6 +41,10 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
+    // Client
+    Route::get('/cart', [ClientController::class, 'carts']);
+    Route::get('/checkout', [ClientController::class, 'checkout']);
+    Route::post('/update-quantity', [ClientController::class, 'updateQty'])->name('update.quantity');
 });
 
 

@@ -195,67 +195,9 @@
                                         </span>
                                         <div id="menu">
                                             <ul>
-                                                <li><span><a href="#0">Collections</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-grid-1-full.html">Trending</a></li>
-                                                        <li><a href="listing-grid-2-full.html">Life style</a></li>
-                                                        <li><a href="listing-grid-3.html">Running</a></li>
-                                                        <li><a href="listing-grid-4-sidebar-left.html">Training</a>
-                                                        </li>
-                                                        <li><a href="listing-grid-5-sidebar-right.html">View all
-                                                                Collections</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><span><a href="#">Men</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-grid-6-sidebar-left.html">Offers</a></li>
-                                                        <li><a href="listing-grid-7-sidebar-right.html">Shoes</a></li>
-                                                        <li><a href="listing-row-1-sidebar-left.html">Clothing</a></li>
-                                                        <li><a href="listing-row-3-sidebar-left.html">Accessories</a>
-                                                        </li>
-                                                        <li><a href="listing-row-4-sidebar-extended.html">Equipment</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li><span><a href="#">Women</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-grid-1-full.html">Best Sellers</a></li>
-                                                        <li><a href="listing-grid-2-full.html">Clothing</a></li>
-                                                        <li><a href="listing-grid-3.html">Accessories</a></li>
-                                                        <li><a href="listing-grid-4-sidebar-left.html">Shoes</a></li>
-                                                    </ul>
-                                                </li>
-                                                <li><span><a href="#">Boys</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-grid-6-sidebar-left.html">Easy On
-                                                                Shoes</a></li>
-                                                        <li><a href="listing-grid-7-sidebar-right.html">Clothing</a>
-                                                        </li>
-                                                        <li><a href="listing-row-3-sidebar-left.html">Must Have</a>
-                                                        </li>
-                                                        <li><a href="listing-row-4-sidebar-extended.html">All Boys</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li><span><a href="#">Girls</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-grid-1-full.html">New Releases</a></li>
-                                                        <li><a href="listing-grid-2-full.html">Clothing</a></li>
-                                                        <li><a href="listing-grid-3.html">Sale</a></li>
-                                                        <li><a href="listing-grid-4-sidebar-left.html">Best Sellers</a>
-                                                        </li>
-                                                    </ul>
-                                                </li>
-                                                <li><span><a href="#">Customize</a></span>
-                                                    <ul>
-                                                        <li><a href="listing-row-1-sidebar-left.html">For Men</a></li>
-                                                        <li><a href="listing-row-2-sidebar-right.html">For Women</a>
-                                                        </li>
-                                                        <li><a href="listing-row-4-sidebar-extended.html">For Boys</a>
-                                                        </li>
-                                                        <li><a href="listing-grid-1-full.html">For Girls</a></li>
-                                                    </ul>
-                                                </li>
+                                                @foreach ($categories as $cat)
+                                                    <li key={{ $cat->name }}><span><a href="#0">{{ $cat->name }}</a></span></li>
+                                                @endforeach
                                             </ul>
                                         </div>
                                     </li>
@@ -269,55 +211,17 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-lg-2 col-md-3">
-                            <ul class="top_tools">
-                                <li>
-                                    <div class="dropdown dropdown-cart">
-                                        <a href="{{ url('/cart') }}" class="cart_bt"><strong>2</strong></a>
-                                        <div class="dropdown-menu">
-                                            <ul>
-                                                <li>
-                                                    <a href="product-detail-1.html">
-                                                        <figure><img
-                                                                src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
-                                                                data-src="{{ asset('client/img/products/shoes/thumb/1.jpg') }}"
-                                                                alt="" width="50" height="50"
-                                                                class="lazy"></figure>
-                                                        <strong><span>1x Armor Air x Fear</span>$90.00</strong>
-                                                    </a>
-                                                    <a href="#0" class="action"><i class="ti-trash"></i></a>
-                                                </li>
-                                                <li>
-                                                    <a href="product-detail-1.html">
-                                                        <figure><img
-                                                                src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
-                                                                data-src="{{ asset('client/img/products/shoes/thumb/2.jpg') }}"
-                                                                alt="" width="50" height="50"
-                                                                class="lazy"></figure>
-                                                        <strong><span>1x Armor Okwahn II</span>$110.00</strong>
-                                                    </a>
-                                                    <a href="0" class="action"><i class="ti-trash"></i></a>
-                                                </li>
-                                            </ul>
-                                            <div class="total_drop">
-                                                <div class="clearfix"><strong>Total</strong><span>$200.00</span></div>
-                                                <a href="{{ url('/cart') }}" class="btn_1 outline">View Cart</a><a
-                                                    href="{{ url('/checkout') }}" class="btn_1">Checkout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- /dropdown-cart-->
-                                </li>
-                                <li>
-                                    <a href="#0" class="wishlist"><span>Wishlist</span></a>
-                                </li>
-                                <li>
-                                    <div class="dropdown dropdown-access">
-                                        <a href="#" class="access_link"><span>Account</span></a>
+                            @if (auth()->check())
+                                <ul class="top_tools">
+                                    <li>
+                                        <div class="dropdown dropdown-access">
+                                            <a href="#" class="access_link d-flex align-items-center gap-2">
+                                                <strong class="text-bold">{{ auth()->user()->name }}</strong>
+                                                <span>Account</span>
+                                            </a>
 
-                                        <div class="dropdown-menu">
-                                            <ul>
-
-                                                @if (auth()->check())
+                                            <div class="dropdown-menu">
+                                                <ul>
                                                     <li>
                                                         <a href="track-order.html"><i class="ti-truck"></i>Track your
                                                             Order</a>
@@ -332,42 +236,84 @@
                                                         <a href="help.html"><i class="ti-help-alt"></i>Help and
                                                             Faq</a>
                                                     </li>
+
                                                     <li>
                                                         <a href="{{ route('logout') }}"
                                                             onclick="event.preventDefault();
-									document.getElementById('logout-form').submit();"><i
+                                document.getElementById('logout-form').submit();"><i
                                                                 class="ti-power-off"></i>{{ __('Logout') }}</a>
                                                         <form id="logout-form" action="{{ route('logout') }}"
                                                             method="POST" class="d-none">
                                                             @csrf
                                                         </form>
                                                     </li>
-                                                @else
-                                                    <li>
-                                                        <a href="{{ url('/login') }}">
-                                                            <i class="ti-power-off"></i>Sign In or Sign
-                                                            Up</a>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <!-- /dropdown-access-->
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
-                                </li>
-                                <li>
-                                    <a href="#menu" class="btn_cat_mob">
-                                        <div class="hamburger hamburger--spin" id="hamburger">
-                                            <div class="hamburger-box">
-                                                <div class="hamburger-inner"></div>
+                                                </ul>
                                             </div>
                                         </div>
-                                        Categories
-                                    </a>
-                                </li>
-                            </ul>
+                                        <!-- /dropdown-access-->
+                                    </li>
+                                    <li>
+                                        <div class="dropdown dropdown-cart">
+                                            <a href="{{ url('/cart') }}" class="cart_bt"><strong>2</strong></a>
+                                            <div class="dropdown-menu">
+                                                <ul>
+                                                    <li>
+                                                        <a href="product-detail-1.html">
+                                                            <figure><img
+                                                                    src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
+                                                                    data-src="{{ asset('client/img/products/shoes/thumb/1.jpg') }}"
+                                                                    alt="" width="50" height="50"
+                                                                    class="lazy"></figure>
+                                                            <strong><span>1x Armor Air x Fear</span>$90.00</strong>
+                                                        </a>
+                                                        <a href="#0" class="action"><i class="ti-trash"></i></a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="product-detail-1.html">
+                                                            <figure><img
+                                                                    src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
+                                                                    data-src="{{ asset('client/img/products/shoes/thumb/2.jpg') }}"
+                                                                    alt="" width="50" height="50"
+                                                                    class="lazy"></figure>
+                                                            <strong><span>1x Armor Okwahn II</span>$110.00</strong>
+                                                        </a>
+                                                        <a href="0" class="action"><i class="ti-trash"></i></a>
+                                                    </li>
+                                                </ul>
+                                                <div class="total_drop">
+                                                    <div class="clearfix"><strong>Total</strong><span>$200.00</span>
+                                                    </div>
+                                                    <a href="{{ url('/cart') }}" class="btn_1 outline">View
+                                                        Cart</a><a href="{{ url('/checkout') }}"
+                                                        class="btn_1">Checkout</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /dropdown-cart-->
+                                    </li>
+                                    <li>
+                                        <a href="#0" class="wishlist"><span>Wishlist</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" class="btn_search_mob"><span>Search</span></a>
+                                    </li>
+                                    <li>
+                                        <a href="#menu" class="btn_cat_mob">
+                                            <div class="hamburger hamburger--spin" id="hamburger">
+                                                <div class="hamburger-box">
+                                                    <div class="hamburger-inner"></div>
+                                                </div>
+                                            </div>
+                                            Categories
+                                        </a>
+                                    </li>
+                                </ul>
+                            @else
+                                <div style="float: right; padding-top: 10px">
+                                    <a href="{{ url('/login') }}" class="btn_1 outline border-secondary rounded">Login</a>
+                                    <a href="{{ url('/register') }}" class="btn_1 outline bg-primary border-primary text-white rounded">Register</a>
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <!-- /row -->

@@ -34,91 +34,71 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <div class="thumb_cart">
-                                <img src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
-                                    data-src="{{ asset('client/img/products/shoes/1.jpg') }}" class="lazy" alt="Image" />
-                            </div>
-                            <span class="item_cart">Armor Air x Fear</span>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1" />
-                                <div class="inc button_inc">+</div>
-                                <div class="dec button_inc">-</div>
-                            </div>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td class="options">
-                            <a href="#"><i class="ti-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="thumb_cart">
-                                <img src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
-                                    data-src="{{ asset('client/img/products/shoes/2.jpg') }}" class="lazy" alt="Image" />
-                            </div>
-                            <span class="item_cart">Armor Okwahn II</span>
-                        </td>
-                        <td>
-                            <strong>$110.00</strong>
-                        </td>
-                        <td>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="quantity_2" class="qty2" name="quantity_2" />
-                                <div class="inc button_inc">+</div>
-                                <div class="dec button_inc">-</div>
-                            </div>
-                        </td>
-                        <td>
-                            <strong>$110.00</strong>
-                        </td>
-                        <td class="options">
-                            <a href="#"><i class="ti-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div class="thumb_cart">
-                                <img src="{{ asset('client/img/products/product_placeholder_square_small.jpg') }}"
-                                    data-src="{{ asset('client/img/products/shoes/3.jpg') }}" class="lazy" alt="Image" />
-                            </div>
-                            <span class="item_cart">Armor Air Wildwood ACG</span>
-                        </td>
-                        <td>
-                            <strong>$90.00</strong>
-                        </td>
-
-                        <td>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="quantity_3" class="qty2" name="quantity_3" />
-                                <div class="inc button_inc">+</div>
-                                <div class="dec button_inc">-</div>
-                            </div>
-                        </td>
-                        <td>
-                            <strong>$90.00</strong>
-                        </td>
-                        <td class="options">
-                            <a href="#"><i class="ti-trash"></i></a>
-                        </td>
-                    </tr>
+                    @php
+                        $qty = 0;
+                    @endphp
+                    @if ($list_cart)
+                        @foreach ($list_cart as $item)
+                            <tr key="{{ $item->id }}">
+                                <td>
+                                    <div class="thumb_cart">
+                                        <img src="{{ asset('storage') . '/' . $item->thumbnail }}"
+                                            data-src="{{ asset('storage') . '/' . $item->thumbnail }}" class="lazy"
+                                            alt="Image" />
+                                    </div>
+                                    <span class="item_cart">{{ $item->name }}</span>
+                                </td>
+                                <td>
+                                    <strong>
+                                        Rp
+                                        @if ($item->discount)
+                                            {{ number_format($item->discount_price, 0, ',', '.') }}
+                                        @else
+                                            {{ number_format($item->sell_price, 0, ',', '.') }}
+                                        @endif
+                                    </strong>
+                                </td>
+                                <td>
+                                    <div class="numbers-row">
+                                        <form method="POST">
+                                            @csrf
+                                            <input type="number" min="{{ $item->quantity }}" value="{{ $item->quantity }}"
+                                                id="quantity_1" class="qty2" name="quantity_1" />
+                                            <div class="inc button_inc">+</div>
+                                            <div class="dec button_inc">-</div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <strong>
+                                        Rp
+                                        @if ($item->quantity)
+                                            @if ($item->discount)
+                                                {{ number_format($item->discount_price * $item->quantity, 0, ',', '.') }}
+                                            @else
+                                                {{ number_format($item->sell_price * $item->quantity, 0, ',', '.') }}
+                                            @endif
+                                        @else
+                                            &nbsp; 0
+                                        @endif
+                                    </strong>
+                                </td>
+                                <td class="options">
+                                    <a href="#"><i class="ti-trash"></i></a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                    @endif
                 </tbody>
             </table>
 
             <div class="row add_top_30 flex-sm-row-reverse cart_actions">
-                <div class="col-sm-4 text-end">
+                {{-- <div class="col-sm-4 text-end">
                     <button type="button" class="btn_1 gray">
                         Update Cart
                     </button>
-                </div>
+                </div> --}}
                 <div class="col-sm-8">
                     <div class="apply-coupon">
                         <div class="form-group">
@@ -146,9 +126,12 @@
                 <div class="row justify-content-end">
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <ul>
-                            <li><span>Subtotal</span> $240.00</li>
-                            <li><span>Shipping</span> $7.00</li>
-                            <li><span>Total</span> $247.00</li>
+                            <li>
+                                <span>Subtotal</span>
+                                Rp {{ number_format($subtotal, 0, ',', '.') }}
+                            </li>
+                            <li><span>Shipping</span> Rp 0</li>
+                            <li><span>Total</span> Rp {{ number_format($subtotal, 0, ',', '.') }}</li>
                         </ul>
                         <a href="{{ url('/checkout') }}" class="btn_1 full-width cart">Proceed to Checkout</a>
                     </div>
@@ -159,3 +142,55 @@
     </main>
     <!--/main-->
 @endsection
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // var valueQty = document.getElementById("quantity_1").value || 0;
+
+        // // Event listener untuk tombol "+"
+        // $(".inc").on("click", function(e) {
+        //     e.preventDefault();
+        //     valueQty = Number(valueQty) + 1;
+        //     console.log(valueQty, "checlk");
+        //     updateQuantity(valueQty);
+        // });
+
+        // $(".desc").on("click", function(e) {
+        //     e.preventDefault();
+
+        //     // Hindari pengurangan ketika sudah mencapai nilai minimum
+        //     if (valueQty > 1) {
+        //         updateQuantity(valueQty - 1);
+        //     }
+        // });
+
+        // // Fungsi untuk mengirim permintaan Ajax
+        // function updateQuantity(quantity) {
+        //     var url = "{{ route('update.quantity') }}";
+        //     var formData = new FormData();
+        //     formData.append('quantity', quantity);
+
+        //     fetch(url, {
+        //             method: 'POST',
+        //             body: formData,
+        //             headers: {
+        //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        //             }
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             if (data.success) {
+        //                 // Berhasil mengupdate quantity, tambahkan kode lain jika perlu
+        //             } else {
+        //                 // Gagal mengupdate quantity, tambahkan kode lain jika perlu
+        //             }
+        //         })
+        //         .catch(error => {
+        //             console.error(error);
+        //             // Tangani kesalahan jika terjadi
+        //         });
+        // }
+        
+    });
+</script>

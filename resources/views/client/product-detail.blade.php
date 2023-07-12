@@ -11,39 +11,24 @@
 
 @section('content')
     <div class="container margin_30">
-        <div class="countdown_inner">
-            -20% This offer ends in
-            <div data-countdown="2019/05/15" class="countdown"></div>
-        </div>
+        @if ($product->discount)
+            <div class="countdown_inner">
+                <span>-{{ number_format($product->discount, 0) }}%</span>
+                This offer ends in
+                <div data-countdown="2019/05/15" class="countdown"></div>
+            </div>
+        @endif
         <div class="row">
             <div class="col-md-6">
                 <div class="all">
                     <div class="slider">
                         <div class="owl-carousel owl-theme main">
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/1.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/2.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/3.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/4.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/5.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/6.jpg') }});
-                          "
-                                class="item-box"></div>
+                            @foreach ($product_images as $item)
+                                <div style="
+                            background-image: url({{ asset('storage') . '/' . $item->path }});
+                        "
+                                    class="item-box"></div>
+                            @endforeach
                         </div>
                         <div class="left nonl">
                             <i class="ti-angle-left"></i>
@@ -54,30 +39,12 @@
                     </div>
                     <div class="slider-two">
                         <div class="owl-carousel owl-theme thumbs">
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/1.jpg') }});
-                          "
-                                class="item active"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/2.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/3.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/4.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/5.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/6.jpg') }});
-                          "
-                                class="item"></div>
+                            @foreach ($product_images as $item)
+                                <div style="
+                            background-image: url({{ asset('storage') . '/' . $item->path }});
+                        "
+                                    class="item active"></div>
+                            @endforeach
                         </div>
                         <div class="left-t nonl-t"></div>
                         <div class="right-t"></div>
@@ -94,16 +61,23 @@
                 </div>
                 <!-- /page_header -->
                 <div class="prod_info">
-                    <h1>Armor Air X Fear</h1>
-                    <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4
-                            reviews</em></span>
+                    <h1>{{ $product->name }}</h1>
+
+                    <span class="rating">
+                        @for ($i = 1; $i <= 5; $i++)
+                            @if ($i <= $product->rating)
+                                <i class="icon-star voted"></i>
+                            @else
+                                <i class="icon-star"></i>
+                            @endif
+                        @endfor
+                        <em>{{ number_format($product->rating, 0) }}
+                            reviews</em>
+                    </span>
                     <p>
-                        <small>SKU: MTKRY-001</small><br />Sed ex
-                        labitur adolescens scriptorem. Te saepe
-                        verear tibique sed. Et wisi ridens vix,
-                        lorem iudico blandit mel cu. Ex vel sint
-                        zril oportere, amet wisi aperiri te cum.
+                        <small>SKU: {{ $product->sku }}</small>
+                        <br />
+                        {{ $product->description }}
                     </p>
                     <div class="prod_options">
                         <div class="row">
@@ -135,10 +109,10 @@
                                         <option value="" selected>
                                             Small (S)
                                         </option>
-                                        <option value="">M</option>
-                                        <option value=" ">L</option>
+                                        <option value="">Medium (M)</option>
+                                        <option value=" ">Large (L)</option>
                                         <option value=" ">
-                                            XL
+                                            XL (X-Large)
                                         </option>
                                     </select>
                                 </div>
@@ -156,8 +130,16 @@
                     <div class="row">
                         <div class="col-lg-5 col-md-6">
                             <div class="price_main">
-                                <span class="new_price">$148.00</span><span class="percentage">-20%</span>
-                                <span class="old_price">$160.00</span>
+                                @if ($product->discount)
+                                    <span class="new_price">Rp
+                                        {{ number_format($product->discount_price, 0, ',', '.') }}</span><span
+                                        class="percentage">-{{ number_format($product->discount, 0) }}%</span>
+                                    <span class="old_price">Rp
+                                        {{ number_format($product->sell_price, 0, ',', '.') }}</span>
+                                @else
+                                    <span class="new_price">Rp
+                                        {{ number_format($product->sell_price, 0, ',', '.') }}</span>
+                                @endif
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
@@ -216,44 +198,7 @@
                             <div class="row justify-content-between">
                                 <div class="col-lg-6">
                                     <h3>Details</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet,
-                                        in eleifend
-                                        <strong>inimicus
-                                            elaboraret</strong>
-                                        his, harum efficiendi mel
-                                        ne. Sale percipit vituperata
-                                        ex mel, sea ne essent
-                                        aeterno sanctus, nam ea
-                                        laoreet civibus electram. Ea
-                                        vis eius explicari. Quot
-                                        iuvaret ad has.
-                                    </p>
-                                    <p>
-                                        Vis ei ipsum
-                                        conclusionemque. Te enim
-                                        suscipit recusabo mea, ne
-                                        vis mazim aliquando, everti
-                                        insolens at sit. Cu vel modo
-                                        unum quaestio, in vide dicta
-                                        has. Ut his laudem explicari
-                                        adversarium, nisl
-                                        <strong>laboramus
-                                            hendrerit</strong>
-                                        te his, alia lobortis vis
-                                        ea.
-                                    </p>
-                                    <p>
-                                        Perfecto eleifend sea no, cu
-                                        audire voluptatibus eam. An
-                                        alii praesent sit, nobis
-                                        numquam principes ea eos, cu
-                                        autem constituto
-                                        suscipiantur eam. Ex graeci
-                                        elaboraret pro. Mei te omnis
-                                        tantas, nobis viderer
-                                        vivendo ex has.
-                                    </p>
+                                    {{ $product->description }}
                                 </div>
                                 <div class="col-lg-5">
                                     <h3>Specifications</h3>
@@ -441,7 +386,8 @@
                     <span class="ribbon new">New</span>
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
+                            <img class="owl-lazy"
+                                src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
                                 data-src="{{ asset('client/img/products/shoes/4.jpg') }}" alt="" />
                         </a>
                     </figure>
@@ -465,8 +411,9 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
                         </li>
                         <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to
+                                    cart</span></a>
                         </li>
                     </ul>
                 </div>
@@ -478,7 +425,8 @@
                     <span class="ribbon new">New</span>
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
+                            <img class="owl-lazy"
+                                src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
                                 data-src="{{ asset('client/img/products/shoes/5.jpg') }}" alt="" />
                         </a>
                     </figure>
@@ -502,8 +450,9 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
                         </li>
                         <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to
+                                    cart</span></a>
                         </li>
                     </ul>
                 </div>
@@ -515,7 +464,8 @@
                     <span class="ribbon hot">Hot</span>
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
+                            <img class="owl-lazy"
+                                src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
                                 data-src="{{ asset('client/img/products/shoes/8.jpg') }}" alt="" />
                         </a>
                     </figure>
@@ -539,8 +489,9 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
                         </li>
                         <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to
+                                    cart</span></a>
                         </li>
                     </ul>
                 </div>
@@ -552,7 +503,8 @@
                     <span class="ribbon off">-30%</span>
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
+                            <img class="owl-lazy"
+                                src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
                                 data-src="{{ asset('client/img/products/shoes/2.jpg') }}" alt="" />
                         </a>
                     </figure>
@@ -577,8 +529,9 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
                         </li>
                         <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to
+                                    cart</span></a>
                         </li>
                     </ul>
                 </div>
@@ -590,7 +543,8 @@
                     <span class="ribbon off">-50%</span>
                     <figure>
                         <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
+                            <img class="owl-lazy"
+                                src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
                                 data-src="{{ asset('client/img/products/shoes/3.jpg') }}" alt="" />
                         </a>
                     </figure>
@@ -615,8 +569,9 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
                         </li>
                         <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
+                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip"
+                                data-bs-placement="left" title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to
+                                    cart</span></a>
                         </li>
                     </ul>
                 </div>

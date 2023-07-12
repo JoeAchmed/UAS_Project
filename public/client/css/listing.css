@@ -398,3 +398,9 @@
 .filter_col .inner_bt i:hover {
   color: #111;
 }
+
+.img-product-fit {
+  width: 290px;
+  height: 290px;
+  object-fit: cover;
+}

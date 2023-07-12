@@ -584,3 +584,9 @@ a.box_news ul li:after {
   content: '-';
   margin: 0 0 0 10px;
 }
+
+.img-product-fit {
+  width: 290px;
+  height: 290px;
+  object-fit: cover;
+}

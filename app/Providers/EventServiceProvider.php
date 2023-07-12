@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\CartClient;
+use Illuminate\Auth\Events\Authenticated;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -23,9 +25,24 @@ class EventServiceProvider extends ServiceProvider
     /**
      * Register any events for your application.
      */
-    public function boot(): void
+    public function boot()
     {
-        //
+        parent::boot();
+
+        // Tangani event authenticated
+        $this->app['events']->listen(Authenticated::class, function ($event) {
+            // Mendapatkan user yang terautentikasi
+            $user = $event->user;
+
+            // Lakukan pengecekan dan penambahan item ke cart
+            $cart = CartClient::where('user_id', $user->id)->first();
+            if (!$cart) {
+                // Jika cart belum ada, buat cart baru dan simpan
+                $cart = new CartClient();
+                $cart->user_id = $user->id;
+                $cart->save();
+            }
+        });
     }
 
     /**
