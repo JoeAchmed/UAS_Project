@@ -44,8 +44,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Client
     Route::get('/cart', [ClientController::class, 'carts']);
     Route::get('/checkout', [ClientController::class, 'checkout']);
+    Route::get('/tracking-order', [ClientController::class, 'trackingOrder']);
     Route::post('/update-quantity', [ClientController::class, 'updateQty'])->name('update.quantity');
-    Route::post('/product/delete', [ClientController::class, 'destroyProduct'])->name('delete.product');
+    Route::post('/product/delete', [ClientController::class, 'destroyProduct'])->name('delete.order');
+    Route::post('/product/create', [ClientController::class, 'addToCart'])->name('create.order');
 });
 
 

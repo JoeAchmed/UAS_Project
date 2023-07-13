@@ -29,10 +29,10 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource cart.
      */
-    public function cart()
+    public function trackingOrder()
     {
         // menampilkan page cart ecommerce
-        return view('client.cart');
+        return view('client.tracking-order');
     }
 
     /**
@@ -45,21 +45,27 @@ class ClientController extends Controller
     }
 
     /**
-     * Display a listing of the resource products.
+     * Display a listing group of the resource products.
      */
-    public function products()
+    public function products(Request $request)
     {
+        $cat_id = $request->query('cat_id');
         // Menggabungkan tabel products dengan product_categories menggunakan join
         $produk = ProductClient::join('product_categories', 'products.cat_id', '=', 'product_categories.id')
             ->select('products.*', 'product_categories.name AS category_name')
             ->get();
 
+        if ($cat_id) {
+            $produk = ProductClient::join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+            ->select('products.*', 'product_categories.name AS category_name')
+            ->where('cat_id', $cat_id)
+            ->get();
+        }
+
         return view('client.products', compact('produk'));
     }
 
-    /**
-     * Display the specified resource product detail.
-     */
+    // Display the specified resource product detail.
     public function productDetail(Request $request, ProductClient $param)
     {
         // Mendapatkan detail produk berdasarkan SKU
@@ -79,7 +85,7 @@ class ClientController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing group of the carts.
      */
     public function carts(Request $request)
     {
@@ -121,7 +127,7 @@ class ClientController extends Controller
         $price = 0;
 
         if ($product) {
-            if($product->discount) {
+            if ($product->discount) {
                 $price = $product->discount_price;
             } else {
                 $price = $product->sell_price;
@@ -156,13 +162,40 @@ class ClientController extends Controller
         ]]);
     }
 
-    // public function addToCart(Request $request, CartItemClient $param)
-    // {
-    //     // menampilkan page pesanan admin
-    //     $list_cart = CartItemClient::where('cart_id', $param->cart_id);
+    public function addToCart(Request $request)
+    {
+        // menampilkan page pesanan admin
+        $orders = new CartItemClient();
+        $carts = CartClient::getUserCart(auth()->user()->id);
+        $prod_id = $request->prod_id;
+        $exist_product = CartItemClient::where('prod_id', $prod_id)->where('cart_id', $carts->id)->first();
 
-    //     return view('client.cart', compact('list_cart'));
-    // }
+        if ($exist_product) {
+            $exist_product->quantity += 1;
+            $exist_product->status = 1;
+            $exist_product->save();
+        } else {
+            $orders->prod_id = $prod_id;
+            $orders->cart_id = $carts->id;
+            $orders->quantity = 1;
+            $orders->status = 1;
+            $orders->save();
+        }
+
+        return redirect('cart')->with('success', 'Produk berhasil ditambahkan');
+    }
+
+    public function destroyProduct(Request $request)
+    {
+        // 
+        $id = $request->id;
+        $cart_items = CartItemClient::find($id);
+        $cart_items->status = 0;
+        $cart_items->quantity = 0;
+        $cart_items->save();
+
+        return redirect('cart')->with('success', 'Produk berhasil dihapus');
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -202,19 +235,5 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
         //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroyProduct(Request $request)
-    {
-        // 
-        $id = $request->id;
-        $cart_items = CartItemClient::find($id);
-        $cart_items->status = 0;
-        $cart_items->save();
-
-        return redirect('cart')->with('success', 'Produk berhasil dihapus');
     }
 }

@@ -12,7 +12,7 @@
 @section('content')
     <div id="carousel-home">
         <div class="owl-carousel owl-theme">
-            <div class="owl-slide cover" style="background-image: url({{ asset('client/img/slides/slide_home_2.jpg') }});">
+            <div class="owl-slide cover" style="background-image: url({{ asset('storage') . '/products/jumbo1.jpg' }});">
                 <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                     <div class="container">
                         <div class="row justify-content-center justify-content-md-end">
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <!--/owl-slide-->
-            <div class="owl-slide cover" style="background-image: url({{ asset('client/img/slides/slide_home_1.jpg') }});">
+            <div class="owl-slide cover" style="background-image: url({{ asset('storage') . '/products/jumbo2.jpg' }});">
                 <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                     <div class="container">
                         <div class="row justify-content-center justify-content-md-start">
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <!--/owl-slide-->
-            <div class="owl-slide cover" style="background-image: url({{ asset('client/img/slides/slide_home_3.jpg') }});">
+            <div class="owl-slide cover" style="background-image: url({{ asset('storage') . '/products/jumbo3.jpg' }});">
                 <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(255, 255, 255, 0.5)">
                     <div class="container">
                         <div class="row justify-content-center justify-content-md-start">
@@ -75,36 +75,18 @@
     <!--/carousel-->
 
     <ul id="banners_grid" class="clearfix">
-        <li>
-            <a href="#0" class="img_container">
-                <img src="{{ asset('client/img/banners_cat_placeholder.jpg') }}"
-                    data-src="{{ asset('client/img/banner_1.jpg') }}" alt="" class="lazy">
-                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-                    <h3>Men's Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#0" class="img_container">
-                <img src="{{ asset('client/img/banners_cat_placeholder.jpg') }}"
-                    data-src="{{ asset('client/img/banner_2.jpg') }}" alt="" class="lazy">
-                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-                    <h3>Womens's Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
-                </div>
-            </a>
-        </li>
-        <li>
-            <a href="#0" class="img_container">
-                <img src="{{ asset('client/img/banners_cat_placeholder.jpg') }}"
-                    data-src="{{ asset('client/img/banner_3.jpg') }}" alt="" class="lazy">
-                <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
-                    <h3>Kids's Collection</h3>
-                    <div><span class="btn_1">Shop Now</span></div>
-                </div>
-            </a>
-        </li>
+        @foreach ($categories as $item)    
+            <li>
+                <a href="{{ url('/products?cat_id=' . $item->id) }}" class="img_container" key="{{ $item->id }}">
+                    <img src="{{ asset('client/img/banners_cat_placeholder.jpg') }}"
+                        data-src="{{ asset('client/img/banner_1.jpg') }}" alt="" class="lazy">
+                    <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
+                        <h3>{{ $item->name }}</h3>
+                        <div><span class="btn_1">Shop Now</span></div>
+                    </div>
+                </a>
+            </li>
+        @endforeach
     </ul>
     <!--/banners_grid -->
 
@@ -122,12 +104,15 @@
                         <figure>
                             <span class="ribbon new">{{ $p->category_name }}</span>
                             @if ($p->discount)
-                                <span class="ribbon off" style="right: 10px; left: auto">-{{ number_format($p->discount, 0) }}%</span>
+                                <span class="ribbon off"
+                                    style="right: 10px; left: auto">-{{ number_format($p->discount, 0) }}%</span>
                             @endif
                             <a href="{{ route('product_detail', $p->slug) }}">
-                                <img class="img-fluid lazy img-product-fit" src="{{ asset('storage') . '/' . $p->thumbnail }}"
+                                <img class="img-fluid lazy img-product-fit"
+                                    src="{{ asset('storage') . '/' . $p->thumbnail }}"
                                     data-src="{{ asset('storage') . '/' . $p->thumbnail }}" alt="">
-                                <img class="img-fluid lazy img-product-fit" src="{{ asset('storage') . '/' . $p->thumbnail }}"
+                                <img class="img-fluid lazy img-product-fit"
+                                    src="{{ asset('storage') . '/' . $p->thumbnail }}"
                                     data-src="{{ asset('storage') . '/' . $p->thumbnail }}" alt="">
                             </a>
                             <div data-countdown="2019/05/15" class="countdown"></div>
@@ -145,12 +130,12 @@
                             <h3>{{ $p->name }}</h3>
                         </a>
                         <div class="price_box">
-                          @if ($p->discount)
-                            <span class="new_price">Rp {{ number_format($p->discount_price, 0, ',', '.') }}</span>
-                            <span class="old_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
-                          @else
-                            <span class="new_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
-                          @endif
+                            @if ($p->discount)
+                                <span class="new_price">Rp {{ number_format($p->discount_price, 0, ',', '.') }}</span>
+                                <span class="old_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
+                            @else
+                                <span class="new_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
+                            @endif
                         </div>
                         <ul>
                             <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
@@ -159,15 +144,26 @@
                             <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
                                     title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to
                                         compare</span></a></li>
-                            <li><a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                    title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a></li>
+                            <li>
+                                <form method="POST" action="{{ route('create.order') }}">
+                                    <a class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
+                                        title="Add to cart">
+                                        @csrf
+                                        <input type="hidden" name="prod_id" value="{{ $p->id }}"
+                                            id="prod_id">
+                                        <button type="submit" class="btn-add-cart">
+                                            <i class="ti-shopping-cart"></i>
+                                            <span>Add to cart</span>
+                                        </button>
+                                    </a>
+                                </form>
+                            </li>
                         </ul>
                     </div>
                     <!-- /grid_item -->
                 </div>
             @endforeach
         </div>
-
     </div>
     <!-- /container -->
 

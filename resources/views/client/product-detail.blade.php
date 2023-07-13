@@ -52,13 +52,9 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="breadcrumbs">
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li>Page active</li>
-                    </ul>
-                </div>
+                @component('client.components.breadcrumb')
+                    @section('page-name', 'Detail Product')
+                @endcomponent
                 <!-- /page_header -->
                 <div class="prod_info">
                     <h1>{{ $product->name }}</h1>
@@ -143,9 +139,17 @@
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-6">
-                            <div class="btn_add_to_cart">
-                                <a href="{{ url('/cart') }}" class="btn_1">Add to Cart</a>
-                            </div>
+
+                            <form method="POST" action="{{ route('create.order') }}">
+                                @csrf
+                                <input type="hidden" name="prod_id" value="{{ $product->id }}" id="prod_id">
+
+                                <button type="submit" class="btn-add-cart">
+                                    <div class="btn_add_to_cart">
+                                        <a class="btn_1">Add to Cart</a>
+                                    </div>
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

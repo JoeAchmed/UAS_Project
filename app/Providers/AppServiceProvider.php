@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Models\CartClient;
 use App\Models\ProductClient;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
