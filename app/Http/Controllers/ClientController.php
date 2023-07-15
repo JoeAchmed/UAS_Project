@@ -63,6 +63,9 @@ class ClientController extends Controller
     public function productDetail(Request $request, ProductClient $param)
     {
         // Mendapatkan detail produk berdasarkan SKU
+        $products = ProductClient::join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+            ->select('products.*', 'product_categories.name AS category_name')
+            ->get();
         $product = ProductClient::where('slug', $param->slug)->first();
 
         if ($product) {
@@ -75,7 +78,7 @@ class ClientController extends Controller
             abort(404, 'Product not found');
         }
 
-        return view('client.product-detail', compact(['product', 'product_images', 'product_colors']));
+        return view('client.product-detail', compact(['product', 'product_images', 'product_colors', 'products']));
     }
 
     /**
@@ -352,6 +355,6 @@ class ClientController extends Controller
             $cart_items->save();
         endforeach;
 
-        return redirect('success');
+        return redirect('orders.success');
     }
 }

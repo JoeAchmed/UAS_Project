@@ -25,7 +25,7 @@ Route::get('/register', function () {
 
 // Client
 Route::get('/', [ClientController::class, 'index'])->name('home');
-Route::get('/products', [ClientController::class, 'products']);
+Route::get('/products', [ClientController::class, 'products'])->name('products');
 Route::get('/product/detail/{param:slug}', [ClientController::class, 'productDetail'])->name('product_detail');
 
 // Admin
@@ -37,8 +37,13 @@ Route::group(['middleware' => 'auth-dbo:admin-manager'], function () {
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');
-    Route::get('/dbo/user/admin', [DashboardController::class, 'usersAdmin'])->name('admin.user.admin');
+    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'users_customer'])->name('admin.user.customer');
+    Route::post('/dbo/user/pelanggan', [DashboardController::class, 'deactivate_account'])->name('admin.deactivate.customer');
+    Route::post('/dbo/user/pelanggan/activate', [DashboardController::class, 'activate_account'])->name('admin.activate.customer');
+    Route::get('/dbo/user/admin', [DashboardController::class, 'users_admin'])->name('admin.user.admin');
+    Route::post('/dbo/user/admin', [DashboardController::class, 'create_user_admin'])->name('admin.user-create.admin');
+    Route::get('/dbo/user/admin/{params:id}', [DashboardController::class, 'get_data_user'])->name('admin.user-data.admin');
+    Route::post('/dbo/user/admin/{params:id}', [DashboardController::class, 'update_user_admin'])->name('admin.user-update.admin');
 
     // Produk
     Route::get('/dbo/produk', [DashboardController::class, 'products'])->name('admin.produk.list');
