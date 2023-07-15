@@ -6,6 +6,7 @@ use App\Models\ProductCategoryAdmin;
 use Yajra\DataTables\Facades\Datatables;
 use App\Models\OrdersAdmin;
 use App\Models\ProductAdmin;
+use App\Models\OrdersItemAdmin;
 use App\Models\ProductClient;
 use App\Models\User;
 use Carbon\Carbon;
@@ -188,24 +189,69 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function orders()
+    public function orders(Request $request)
     {
-        // menampilkan page pesanan admin
+        // menampilkan page kategori produk admin
+        if ($request->ajax()) {
+            $data = OrdersItemAdmin::join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->join('products', 'order_items.prod_id', '=', 'products.id')
+                ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+                ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
+                ->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete"><i class="bx bx-trash"></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('admin.pesanan.list');
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function usersCustomer()
+    public function usersCustomer(Request $request)
     {
-        // menampilkan page pesanan admin
+        // menampilkan page kategori produk admin
+        if ($request->ajax()) {
+            $roles = ['pelanggan'];
+            $data = User::select('*')->whereIn('role', $roles)->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete"><i class="bx bx-trash"></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('admin.user.list-customer');
     }
 
-    public function usersAdmin()
+    public function usersAdmin(Request $request)
     {
-        // menampilkan page pesanan admin
+        // menampilkan page kategori produk admin
+        if ($request->ajax()) {
+            $roles = ['admin', 'manager'];
+            $data = User::select('*')->whereIn('role', $roles)->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete"><i class="bx bx-trash"></i></a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('admin.user.list-admin');
     }
 

@@ -1,4 +1,4 @@
-@extends('auth.layout.main')
+@extends('auth.layout.main', ['title' => 'Daftar Pesanan'])
 @section('content')
     <!-- Login -->
     <div class="card">

@@ -1,241 +1,91 @@
-
-@extends('admin.layout.appadmin')
+@extends('admin.layout.appadmin', ['title' => 'User Admin'])
 @section('content')
+@section('title')
+    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / <a
+            href="{{ route('admin.user.admin') }}">User</a> /</span> User Admin
+@endsection
 
-  @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> /</span> List User
-  @endsection
-
-  <!-- Hoverable Table rows -->
-  <div class="card">
+<!-- Hoverable Table rows -->
+<div class="card">
     <div class="d-flex justify-content-between align-items-center">
-      <h5 class="card-header">Data User</h5>
-      <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
-        <i class="menu-icon tf-icons bx bx-plus"></i>
-        Tambah
-      </button>
+        <h5 class="card-header">Data List Admin</h5>
+        <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
+            <i class="menu-icon tf-icons bx bx-plus"></i>
+            Tambah
+        </button>
     </div>
-    <div class="table-responsive text-nowrap">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Project</th>
-            <th>Client</th>
-            <th>Users</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody class="table-border-bottom-0">
-          <tr>
-            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-            <td>Albert Cook</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-primary me-1">Active</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>React Project</strong></td>
-            <td>Barry Hunter</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-success me-1">Completed</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>VueJs Project</strong></td>
-            <td>Trevor Baker</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>Bootstrap Project</strong>
-            </td>
-            <td>Jerry Milton</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-warning me-1">Pending</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="container mb-3">
+        <table class="table table-hover" id="tableData">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Nama User</th>
+                    <th>Alamat Email</th>
+                    <th>Nomer HP</th>
+                    <th>Tanggal Registrasi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody class="table-border-bottom-0">
+            </tbody>
+        </table>
     </div>
-  </div>
-  <!--/ Hoverable Table rows -->
+</div>
+<!--/ Hoverable Table rows -->
+@endsection
+@section('js')
+<script>
+    var tableData;
+
+    $(function($) {
+        tableData = $('#tableData').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.user.admin') }}",
+            columns: [{
+                    data: 'id',
+                    name: 'id',
+                    className: 'text-center' // Kolom id akan berada di tengah
+                },
+                {
+                    data: 'name',
+                    name: 'name',
+                },
+                {
+                    data: 'email',
+                    name: 'email',
+                },
+                {
+                    data: 'phone_number',
+                    name: 'phone_number',
+                    render: function(data) {
+                        return data ?? "-";
+                    },
+                    className: 'text-center' // Kolom phone_number akan berada di tengah
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data) {
+                        const dateObject = new Date(data);
+                        const day = dateObject.getDate();
+                        const month = dateObject.toLocaleString('default', {
+                            month: 'long'
+                        });
+                        const year = dateObject.getFullYear();
+                        return `${day} ${month} ${year}`;
+                    },
+                    className: 'text-center' // Kolom created_at akan berada di tengah
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center' // Kolom action akan berada di tengah
+                },
+            ]
+        });
+    });
+</script>
 @endsection

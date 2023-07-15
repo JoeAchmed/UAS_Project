@@ -99,7 +99,7 @@
 
     <!-- Pesanan -->
     <li class="menu-item @if(Request::url() == route('admin.pesanan.list')) active @endif">
-      <a href="{{ url('/dbo/pesanan') }}" class="menu-link">
+      <a href="{{ route('admin.pesanan.list') }}" class="menu-link">
         <i class="menu-icon tf-icons bx bx-cart"></i>
         <div data-i18n="Without navbar">List Pesanan</div>
       </a>
