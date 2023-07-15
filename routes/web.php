@@ -36,8 +36,14 @@ Route::post('/logout-dbo', [DashboardController::class, 'logout'])->name('admin.
 Route::group(['middleware' => 'auth-dbo'], function () {
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
+    
     // Produk
     Route::get('/dbo/produk', [DashboardController::class, 'products'])->name('admin.produk.list');
+    Route::get('/dbo/produk/tambah', [DashboardController::class, 'product_add'])->name('admin.produk.add');
+    Route::post('/dbo/produk/tambah', [DashboardController::class, 'product_create'])->name('admin.produk.create');
+    Route::get('/dbo/produk/ubah/{params:id}', [DashboardController::class, 'product_edit'])->name('admin.produk.edit');
+    Route::post('/dbo/produk/update', [DashboardController::class, 'product_update'])->name('admin.produk.update');
+
     // Kategori Produk
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categories'])->name('admin.produk.kategori.list');
     Route::get('/dbo/produk/tambah-kategori', [DashboardController::class, 'category_add'])->name('admin.produk.kategori.add');

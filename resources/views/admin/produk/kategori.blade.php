@@ -2,8 +2,8 @@
 @section('content')
 
 @section('title')
-<span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / <a
-        href="{{ route('admin.produk.list') }}">Produk</a> /</span> Kategori Produk
+<span class="text-muted fw-bold"><a href="{{ route('admin.produk.list') }}">Produk</a>
+        /</span> List Kategori Produk
 @endsection
 
 <!-- Hoverable Table rows -->
@@ -31,7 +31,6 @@
 </div>
 <!--/ Hoverable Table rows -->
 
-
 {{-- Modal --}}
 <div class="modal fade" id="modalForm" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static"
     aria-hidden="true">
@@ -44,7 +43,7 @@
             <div class="modal-body">
                 <form autocomplete="off" id="form">
                     @csrf
-                    <input type="text" name="id" id="id">
+                    <input type="hidden" name="id" id="id">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Kategori</label>
                         <input type="text" class="form-control" name="name" id="name"

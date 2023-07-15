@@ -8,12 +8,14 @@ use App\Models\OrdersAdmin;
 use App\Models\ProductAdmin;
 use App\Models\OrdersItemAdmin;
 use App\Models\ProductClient;
+use App\Models\ProductImages;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -95,7 +97,7 @@ class DashboardController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-warning btn-sm btn-sm-action" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" data-id="' . $row->id . '" id="btnDelete"><i class="bx bx-trash"></i></a><form id="deleteForm" action="' . route('admin.produk.kategori.delete') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $actionBtn = '<a href="' . route('admin.produk.edit', $row->id) . '" class="btn btn-warning btn-sm btn-sm-action"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" data-id="' . $row->id . '" id="btnDelete"><i class="bx bx-trash"></i></a><form id="deleteForm" action="' . route('admin.produk.kategori.delete') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -103,6 +105,164 @@ class DashboardController extends Controller
         }
 
         return view('admin.produk.produk');
+    }
+
+    public function product_add()
+    {
+        $data['categories'] = ProductAdmin::all();
+        return view('admin.produk.produk_form', $data);
+    }
+
+    public function product_create(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'img_details' => 'array|max:5',
+            'img_details.*' => 'required|image|mimes:jpeg,png,jpg,gif',
+            'name' => 'required|unique:products',
+            'cat_id' => 'required',
+            'acq_price' => 'required',
+            'sell_price' => 'required',
+            'discount' => 'required|gte:0',
+            'description' => 'required',
+            'size' => 'required',
+            'weight' => 'required',
+            'manufacturer' => 'required',
+        ], [
+            'thumbnail.required' => 'Thumbnail harus diisi.',
+            'thumbnail.image' => 'Thumbnail harus berupa file gambar.',
+            'thumbnail.mimes' => 'Thumbnail harus memiliki tipe file: jpeg, png, jpg, gif.',
+            'img_details.max' => 'Detail Gambar tidak boleh lebih dari 5.',
+            'img_details.*.required' => 'Detail Gambar harus diisi.',
+            'img_details.*.image' => 'Detail Gambar harus berupa file gambar.',
+            'img_details.*.mimes' => 'Detail Gambar harus memiliki tipe file: jpeg, png, jpg, gif.',
+            'name.required' => 'Nama Produk harus diisi.',
+            'name.unique' => 'Nama Produk sudah digunakan.',
+            'cat_id.required' => 'Kategori harus diisi.',
+            'acq_price.required' => 'Harga Belo harus diisi.',
+            'sell_price.required' => 'Harga Jual harus diisi.',
+            'discount.required' => 'Diskon harus diisi.',
+            'discount.gte' => 'Diskon harus lebih besar dari atau sama dengan 0.',
+            'description.required' => 'Deskripsi harus diisi.',
+            'size.required' => 'Ukuran harus diisi.',
+            'weight.required' => 'Berat harus diisi.',
+            'manufacturer.required' => 'Produsen harus diisi.',
+        ]);
+
+        if ($validate->passes()) {
+            $kategori = ProductCategoryAdmin::where('id', $request->cat_id)->first();
+
+            $prefix = strtoupper(substr($kategori->name, 0, 3));
+            $amount = ProductAdmin::where('cat_id', $request->cat_id)->count();
+            $amount++;
+            $sku = $prefix . '-' . str_pad($amount, 3, '0', STR_PAD_LEFT);
+
+            $thumb = $request->file('thumbnail');
+            $thumbName = Str::random(25) . '.' . $thumb->getClientOriginalExtension();
+            $thumbPath = 'products/' . $thumbName;
+
+            $data = $request->all();
+            $data['thumbnail'] = $thumbPath;
+            $data['sku'] = $sku;
+            $data['slug'] = Str::slug($request->name);
+            $data['acq_price'] = intval(str_replace(".", "", $request->acq_price));
+            $data['sell_price'] = intval(str_replace(".", "", $request->sell_price));
+            $data['discount'] = ($request->discount == 0 ? NULL : $request->discount);
+            if ($data['discount']) {
+                $data['discount_price'] = ($data['sell_price'] * $data['discount']) / 100;
+            }
+            $data['created_at'] = Carbon::now();
+
+            $product = ProductAdmin::create($data);
+
+            if ($product) {
+                Storage::put('public/products/' . $thumbName, file_get_contents($thumb));
+
+                $imgDetailPaths = [];
+                foreach ($request->file('img_details') as $imgDetail) {
+                    $imgDetailName = Str::random(25) . '.' . $imgDetail->getClientOriginalExtension();
+                    $imgDetailPath = 'products/' . $imgDetailName;
+
+                    Storage::put('public/products/' . $imgDetailName, file_get_contents($imgDetail));
+
+                    $imgDetailPaths[] = $imgDetailPath;
+
+                    $prodImages = new ProductImages();
+                    $prodImages->prod_id = $product->id;
+                    $prodImages->path = $imgDetailPath;
+                    $prodImages->save();
+                }
+            }
+            Session::flash('success', 'Produk berhasil ditambahkan!');
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['err' => $validate->errors()]);
+        }
+    }
+
+    public function product_edit(ProductAdmin $params)
+    {
+        $data['product'] = ProductAdmin::where('id', $params->id)->first();
+        $data['product_images'] = ProductImages::where('prod_id', $data['product']->id)->get();
+
+        $data['categories'] = ProductAdmin::all();
+
+        return view('admin.produk.produk_form', $data);
+    }
+
+    public function product_update(Request $request)
+    {
+        $product = ProductAdmin::where('id', $request->id)->first();
+
+        ($request->name == $product->name ? $rule_name = 'required' : $rule_name = 'required|unique:products');
+
+        var_dump($request->thumbnail . $request->file('thumbnail'));
+        die;
+
+        $validate = Validator::make($request->all(), [
+            'thumbnail' => 'required|images|mimes:jpeg,png,jpg,gif',
+            'img_details' => 'array|max:5',
+            'img_details.*' => 'required|images|mimes:jpeg,png,jpg,gif',
+            'name' => $rule_name,
+            'cat_id' => 'required',
+            'acq_price' => 'required',
+            'sell_price' => 'required',
+            'discount' => 'required|gte:0',
+            'description' => 'required',
+            'size' => 'required',
+            'weight' => 'required',
+            'manufacturer' => 'required',
+        ], [
+            'thumbnail.required' => 'Thumbnail harus diisi.',
+            'thumbnail.image' => 'Thumbnail harus berupa file gambar.',
+            'thumbnail.mimes' => 'Thumbnail harus memiliki tipe file: jpeg, png, jpg, gif.',
+            'img_details.max' => 'Detail Gambar tidak boleh lebih dari 5.',
+            'img_details.*.required' => 'Detail Gambar harus diisi.',
+            'img_details.*.image' => 'Detail Gambar harus berupa file gambar.',
+            'img_details.*.mimes' => 'Detail Gambar harus memiliki tipe file: jpeg, png, jpg, gif.',
+            'name.required' => 'Nama Produk harus diisi.',
+            'name.unique' => 'Nama Produk sudah digunakan.',
+            'cat_id.required' => 'Kategori harus diisi.',
+            'acq_price.required' => 'Harga Belo harus diisi.',
+            'sell_price.required' => 'Harga Jual harus diisi.',
+            'discount.required' => 'Diskon harus diisi.',
+            'discount.gte' => 'Diskon harus lebih besar dari atau sama dengan 0.',
+            'description.required' => 'Deskripsi harus diisi.',
+            'size.required' => 'Ukuran harus diisi.',
+            'weight.required' => 'Berat harus diisi.',
+            'manufacturer.required' => 'Produsen harus diisi.',
+        ]);
+
+        if ($validate->passes()) {
+            $thumb = $request->file('thumbnail');
+            $thumbName = Str::random(25) . '.' . $thumb->getClientOriginalExtension();
+            $thumbPath = 'products/' . $thumbName;
+
+
+            dd($thumb);
+        } else {
+            return response()->json(['err' => $validate->errors()]);
+        }
     }
 
     // ----------- CATEGORY PRODUCTS
