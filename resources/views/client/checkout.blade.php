@@ -11,11 +11,7 @@
 @endsection
 
 @section('content')
-    @if (request()->query('status') == 'success')
-        @include('client.components.checkout.success')
-    @else
-        @include('client.components.checkout.main')
-    @endif
+    @include('client.components.checkout.main')
     <!-- /container -->
 @endsection
 

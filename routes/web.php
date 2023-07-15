@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // orders
     Route::get('/orders', [ClientController::class, 'orders'])->name('orders');
+    Route::get('/success', [ClientController::class, 'orders'])->name('success');
     Route::get('/checkout', [ClientController::class, 'checkout'])->name('checkout');
     Route::post('/orders/create', [ClientController::class, 'createOrder'])->name('create.order');
 
