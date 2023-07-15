@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\CartClient;
 use App\Models\CartItemClient;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -33,6 +34,16 @@ class CartItemsComposerServiceProvider extends ServiceProvider
             }
 
             $view->with('cartItemsCount', $cartItemsCount);
+        });
+
+        View::composer('admin.layout.menu', function ($view) {
+            $role = null;
+
+            if (Session::get('user_id')) {
+                $role = Session::get('role');
+            }
+
+            $view->with('role', $role);
         });
     }
 }
