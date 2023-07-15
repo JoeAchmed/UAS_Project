@@ -140,7 +140,7 @@
                                                             Order</a>
                                                     </li>
                                                     <li>
-                                                        <a href="account.html"><i class="ti-package"></i>My Orders</a>
+                                                        <a href="{{ url('/orders') }}"><i class="ti-package"></i>My Orders</a>
                                                     </li>
                                                     <li>
                                                         <a href="account.html"><i class="ti-user"></i>My Profile</a>
