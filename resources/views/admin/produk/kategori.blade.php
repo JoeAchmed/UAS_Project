@@ -44,7 +44,7 @@
             <div class="modal-body">
                 <form autocomplete="off" id="form">
                     @csrf
-                    <input type="text" name="id" id="id">
+                    <input type="hidden" name="id" id="id">
                     <div class="mb-3">
                         <label for="name" class="form-label">Nama Kategori</label>
                         <input type="text" class="form-control" name="name" id="name"
