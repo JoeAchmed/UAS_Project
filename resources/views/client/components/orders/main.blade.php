@@ -1,4 +1,4 @@
-<main class="bg_gray py-lg-5">
+<main class="bg_gray">
     <div class="container margin_30">
         <div class="page_header">
             @component('client.components.breadcrumb')
@@ -40,9 +40,6 @@
                             Price
                         </th>
                         <th>
-                            Payment
-                        </th>
-                        <th>
                             Discount
                         </th>
                         <th>
@@ -75,19 +72,6 @@
                                     @endif
                                 </strong>
                             </td>
-
-                            <td>
-                              @if ($val->payment_method == 'visa')
-                                  <i class="fa-brands fa-cc-visa"></i>
-                              @elseif ($val->payment_method == 'mastercard')
-                                  <i class="fa-brands fa-cc-mastercard"></i>
-                              @elseif ($val->payment_method == 'paypal')
-                                  <i class="fa-brands fa-cc-paypal"></i>
-                              @else
-                                  <i class="fa-brands fa-cc-amex"></i>
-                              @endif
-                          </td>
-                          
 
                             <td>
                                 <strong>{{ $val->discount ? number_format($val->discount, 0) . '%' : '-' }}</strong>

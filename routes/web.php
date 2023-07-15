@@ -39,7 +39,8 @@ Route::group(['middleware' => 'auth-dbo'], function () {
     Route::get('/dbo/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
-    Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
+    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');
+    Route::get('/dbo/user/admin', [DashboardController::class, 'usersAdmin'])->name('admin.user.admin');
 });
 
 
