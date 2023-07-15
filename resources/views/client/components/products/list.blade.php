@@ -229,7 +229,7 @@
                                 title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to
                                     compare</span></a></li>
                         <li>
-                            <form method="POST" action="{{ route('create.order') }}">
+                            <form method="POST" action="{{ route('create.cart') }}">
                                 <a class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
                                     title="Add to cart">
                                     @csrf
@@ -250,16 +250,9 @@
 
         {{-- if has no product/filter --}}
         @if (!count($produk))
-            <div class="container">
-                <div class="row justify-content-center text-center">
-                    <div class="col-xl-7 col-lg-9">
-                        <img src="{{ asset('/client/img/404.svg') }}" alt="" class="img-fluid"
-                            width="400" height="212">
-                        <h5 class="my-5">Tidak ada produk ditemukan!</h5>
-                    </div>
-                </div>
-                <!-- /row -->
-            </div>
+            @component('client.components.404')
+                @section('desc', 'Tidak ada produk ditemukan !')
+            @endcomponent
         @endif
         <!-- /container -->
     </div>

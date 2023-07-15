@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Client
-Route::get('/', [ClientController::class, 'index']);
+Route::get('/', [ClientController::class, 'index'])->name('home');
 Route::get('/products', [ClientController::class, 'products']);
 Route::get('/product/detail/{param:slug}', [ClientController::class, 'productDetail'])->name('product_detail');
 
@@ -34,23 +34,28 @@ Route::get('/register', function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dbo/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
+
     // Client
+    // cart
     Route::get('/cart', [ClientController::class, 'carts']);
-    Route::get('/checkout', [ClientController::class, 'checkout']);
-    Route::get('/tracking-order', [ClientController::class, 'trackingOrder']);
     Route::post('/update-quantity', [ClientController::class, 'updateQty'])->name('update.quantity');
-    Route::post('/product/delete', [ClientController::class, 'destroyProduct'])->name('delete.order');
-    Route::post('/product/create', [ClientController::class, 'addToCart'])->name('create.order');
+    Route::post('/product/delete', [ClientController::class, 'destroyProduct'])->name('delete.cart');
+    Route::post('/product/create', [ClientController::class, 'addToCart'])->name('create.cart');
+
+    // orders
+    Route::get('/orders', [ClientController::class, 'orders'])->name('orders');
+    Route::get('/checkout', [ClientController::class, 'checkout'])->name('checkout');
+    Route::post('/orders/create', [ClientController::class, 'createOrder'])->name('create.order');
+
+    // tracking
+    Route::get('/tracking-order', [ClientController::class, 'trackingOrder']);
 });
 
 
 Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

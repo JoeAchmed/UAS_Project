@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\CartClient;
 use App\Models\CartItemClient;
+use App\Models\OrdersClient;
+use App\Models\OrdersItemClient;
 use App\Models\ProductClient;
 use App\Models\ProductColor;
 use App\Models\ProductImages;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Date;
 
 $user = Auth::user();
 class ClientController extends Controller
@@ -36,15 +39,6 @@ class ClientController extends Controller
     }
 
     /**
-     * Display a listing of the resource checkouts.
-     */
-    public function checkout()
-    {
-        // menampilkan page checkout ecommerce
-        return view('client.checkout');
-    }
-
-    /**
      * Display a listing group of the resource products.
      */
     public function products(Request $request)
@@ -57,9 +51,9 @@ class ClientController extends Controller
 
         if ($cat_id) {
             $produk = ProductClient::join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-            ->select('products.*', 'product_categories.name AS category_name')
-            ->where('cat_id', $cat_id)
-            ->get();
+                ->select('products.*', 'product_categories.name AS category_name')
+                ->where('cat_id', $cat_id)
+                ->get();
         }
 
         return view('client.products', compact('produk'));
@@ -165,21 +159,28 @@ class ClientController extends Controller
     public function addToCart(Request $request)
     {
         // menampilkan page pesanan admin
-        $orders = new CartItemClient();
+        $cart_items = new CartItemClient();
         $carts = CartClient::getUserCart(auth()->user()->id);
         $prod_id = $request->prod_id;
+        $qty = 1;
         $exist_product = CartItemClient::where('prod_id', $prod_id)->where('cart_id', $carts->id)->first();
 
+        if ($request->qty) {
+            $qty = $request->qty;
+        } else {
+            $qty = 1;
+        }
+
         if ($exist_product) {
-            $exist_product->quantity += 1;
+            $exist_product->quantity += $qty;
             $exist_product->status = 1;
             $exist_product->save();
         } else {
-            $orders->prod_id = $prod_id;
-            $orders->cart_id = $carts->id;
-            $orders->quantity = 1;
-            $orders->status = 1;
-            $orders->save();
+            $cart_items->prod_id = $prod_id;
+            $cart_items->cart_id = $carts->id;
+            $cart_items->quantity = $qty;
+            $cart_items->status = 1;
+            $cart_items->save();
         }
 
         return redirect('cart')->with('success', 'Produk berhasil ditambahkan');
@@ -235,5 +236,125 @@ class ClientController extends Controller
     public function update(Request $request, string $id)
     {
         //
+    }
+
+    function generateInvoiceNumber()
+    {
+        $orders = new OrdersClient();
+
+        // Tentukan format nomor invoice
+        $format = 'INV{Y}{m}{num}';
+
+        // Ambil informasi tanggal
+        $year = date('Y');
+        $month = date('m');
+
+        // Ambil ID order terakhir
+        $lastOrder = $orders->orderBy('id', 'desc')->first();
+        $lastNumber = $lastOrder ? $lastOrder->id : 0;
+
+        // Tingkatkan nomor urut
+        $newNumber = $lastNumber + 1;
+
+        // Buat nomor invoice
+        $invoiceNumber = str_replace(['{Y}', '{m}', '{num}'], [$year, $month, $newNumber], $format);
+
+        return $invoiceNumber;
+    }
+
+    /**
+     * Display a listing group of the resource orders.
+     */
+    public function orders(Request $request)
+    {
+        $orders = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->join('products', 'order_items.prod_id', '=', 'products.id')
+                ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+                ->select('products.*', 'product_categories.name AS category_name', 'orders.*')
+                ->get();
+
+        return view('client.orders', compact('orders'));
+    }
+
+    public function checkout(Request $request)
+    {
+        $cart = CartClient::getUserCart(auth()->user()->id);
+        $cart_items = CartItemClient::getCartItems($cart->id);
+        $cart_id = $cart->id;
+        $subtotal = 0; // Initialize $subtotal variable
+
+        if (!count($cart_items) || $cart_items[0]->status == 0) return redirect('cart')->with('success', 'Silakan Checkout Cart Terlebih Dahulu');
+
+        foreach ($cart_items as $item) {
+            // Calculate subtotal
+            if ($item->quantity) {
+                if ($item->discount) {
+                    $subtotal += $item->discount_price * $item->quantity;
+                } else {
+                    $subtotal += $item->sell_price * $item->quantity;
+                }
+            }
+        }
+        return view('client.checkout', compact(['cart_items', 'subtotal', 'cart_id']));
+    }
+
+    /**
+     * Display a listing group of the resource orders.
+     */
+    public function createOrder(Request $request)
+    {
+        $order = new OrdersClient();
+
+        $shipping_method = $request->shipping_method;
+        $shipping_price = $request->shipping_price;
+        $payment_method = $request->payment_method;
+        $invoice = $this->generateInvoiceNumber();
+        $status = "inprogress";
+
+        $order->user_id = auth()->user()->id;
+        $order->shipping_method = $shipping_method;
+        $order->shipping_price = $shipping_price;
+        $order->payment_method = $payment_method;
+        $order->status = $status;
+        $order->invoice = $invoice;
+
+        $order->save();
+
+        //  Panggil metode createOrderItems
+        $this->createOrderItems($order->id);
+    }
+
+    public function createOrderItems($order_id)
+    {
+        $cart_item = CartClient::getUserCart(auth()->user()->id);
+        // menampilkan page pesanan admin
+        $list_cart = CartItemClient::getCartItems($cart_item->id)->where('status', 1);
+
+        foreach ($list_cart as $item) :
+            $order_items = new OrdersItemClient();
+
+            $order_items->order_id = $order_id;
+            $order_items->prod_id = $item->prod_id;
+            $order_items->quantity = $item->quantity;
+            if ($item->discount) {
+                $order_items->price = $item->discount_price * $item->quantity;
+            } else {
+                $order_items->price = $item->sell_price * $item->quantity;
+            }
+            $order_items->created_at = date('Y-m-d H:i:s');
+            $order_items->save();
+
+            $data = ProductClient::where('id', $item->prod_id)->first();
+            $data->stock -= $item->quantity;
+            $data->save();
+
+            $cart_items = CartItemClient::find($item->id);
+
+            $cart_items->quantity = 0;
+            $cart_items->status = 0;
+            $cart_items->save();
+        endforeach;
+
+        return redirect('orders');
     }
 }

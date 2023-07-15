@@ -191,7 +191,7 @@
                         </div>
                         <ul>
                             <li>
-                                <form method="POST" action="{{ route('create.order') }}">
+                                <form method="POST" action="{{ route('create.cart') }}">
                                     @csrf
                                     <input type="hidden" name="prod_id" value="{{ $p->id }}"
                                         id="prod_id">
@@ -214,16 +214,9 @@
 
             {{-- if has no product/filter --}}
             @if (!count($produk))
-                <div class="container">
-                    <div class="row justify-content-center text-center">
-                        <div class="col-xl-7 col-lg-9">
-                            <img src="{{ asset('/client/img/404.svg') }}" alt="" class="img-fluid"
-                                width="400" height="212">
-                            <h5 class="my-5">Tidak ada produk ditemukan!</h5>
-                        </div>
-                    </div>
-                    <!-- /row -->
-                </div>
+                @component('client.components.404')
+                    @section('desc', 'Tidak ada produk ditemukan !')
+                @endcomponent
             @endif
             <!-- /row_item -->
             <div class="pagination__wrapper">

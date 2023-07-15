@@ -19,130 +19,147 @@
             @endcomponent
         </div>
         <!-- /page_header -->
-        <table class="table table-striped cart-list">
-            <thead>
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th>Subtotal</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $qty = 0;
-                @endphp
-                @if ($list_cart)
-                    @foreach ($list_cart as $item)
-                        <tr key="{{ $item->id }}">
-                            <td>
-                                <div class="thumb_cart">
-                                    <img src="{{ asset('storage') . '/' . $item->thumbnail }}"
-                                        data-src="{{ asset('storage') . '/' . $item->thumbnail }}" class="lazy"
-                                        alt="Image" />
-                                </div>
-                                <span class="item_cart">{{ $item->name }}</span>
-                            </td>
-                            <td>
-                                <strong>
-                                    Rp
-                                    @if ($item->discount)
-                                        {{ number_format($item->discount_price, 0, ',', '.') }}
-                                    @else
-                                        {{ number_format($item->sell_price, 0, ',', '.') }}
-                                    @endif
-                                </strong>
-                            </td>
-                            <td>
-                                <div class="numbers-row">
-                                    <form method="POST">
-                                        @csrf
-                                        <input type="number" id="quantity_{{ $item->id }}"
-                                            min="{{ $item->quantity }}" value="{{ $item->quantity }}" class="qty2"
-                                            name="quantity_{{ $item->id }}" max="100" style="width: 64px" />
-                                        <div data-id="{{ $item->id }}" class="inc button_inc">+</div>
-                                        <div data-id="{{ $item->id }}" class="dec button_inc">-</div>
-                                    </form>
-                                </div>
-                            </td>
-                            <td class="text-center">
-                                <div id="item_total{{ $item->id }}">
-                                    Rp
-                                    @if ($item->quantity)
+        @if (count($list_cart))
+            <table class="table table-striped cart-list">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $qty = 0;
+                    @endphp
+                    @if ($list_cart)
+                        @foreach ($list_cart as $item)
+                            <tr key="{{ $item->id }}">
+                                <td>
+                                    <div class="thumb_cart">
+                                        <img src="{{ asset('storage') . '/' . $item->thumbnail }}"
+                                            data-src="{{ asset('storage') . '/' . $item->thumbnail }}" class="lazy"
+                                            alt="Image" />
+                                    </div>
+                                    <span class="item_cart">{{ $item->name }}</span>
+                                </td>
+                                <td>
+                                    <strong>
+                                        Rp
                                         @if ($item->discount)
-                                            {{ number_format($item->discount_price * $item->quantity, 0, ',', '.') }}
+                                            {{ number_format($item->discount_price, 0, ',', '.') }}
                                         @else
-                                            {{ number_format($item->sell_price * $item->quantity, 0, ',', '.') }}
+                                            {{ number_format($item->sell_price, 0, ',', '.') }}
                                         @endif
-                                    @else
-                                        &nbsp; 0
-                                    @endif
-                                </div>
-                            </td>
-                            <td class="options">
-                                <form method="POST" action="{{ route('delete.order') }}">
-                                    @csrf
-                                    <input type="hidden" name="id" value="{{ $item->id }}" id="id">
-                                    <button class="btn-delete" type="submit"
-                                        onclick="return confirm('Anda yakin akan menghapus produk ini ?')">
-                                        <i class="ti-trash"></i>
-                                    </button>
-                                </form>
-                            </td>
-                        </tr>
-                    @endforeach
-                @endif
-            </tbody>
-        </table>
+                                    </strong>
+                                </td>
+                                <td>
+                                    <div class="numbers-row">
+                                        <form method="POST">
+                                            @csrf
+                                            <input type="number" id="quantity_{{ $item->id }}"
+                                                min="{{ $item->quantity }}" value="{{ $item->quantity }}" class="qty2"
+                                                name="quantity_{{ $item->id }}" max="100"
+                                                style="width: 64px" />
+                                            <div data-id="{{ $item->id }}" class="inc button_inc">+</div>
+                                            <div data-id="{{ $item->id }}" class="dec button_inc">-</div>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <div id="item_total{{ $item->id }}">
+                                        <strong>
+                                            Rp
+                                            @if ($item->quantity)
+                                                @if ($item->discount)
+                                                    {{ number_format($item->discount_price * $item->quantity, 0, ',', '.') }}
+                                                @else
+                                                    {{ number_format($item->sell_price * $item->quantity, 0, ',', '.') }}
+                                                @endif
+                                            @else
+                                                &nbsp; 0
+                                            @endif
+                                            <strong>
+                                    </div>
+                                </td>
+                                <td class="options">
+                                    <form method="POST" action="{{ route('delete.cart') }}">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $item->id }}"
+                                            id="id">
+                                        <button class="btn-delete" type="submit"
+                                            onclick="return confirm('Anda yakin akan menghapus produk ini ?')">
+                                            <i class="ti-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                </tbody>
+            </table>
 
-        <div class="row add_top_30 flex-sm-row-reverse cart_actions">
-            {{-- <div class="col-sm-4 text-end">
-                    <button type="button" class="btn_1 gray">
-                        Update Cart
-                    </button>
-                </div> --}}
-            <div class="col-sm-8">
-                <div class="apply-coupon">
-                    <div class="form-group">
-                        <div class="row g-2">
-                            <div class="col-md-6">
-                                <input type="text" name="coupon-code" value="" placeholder="Promo code"
-                                    class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn_1 outline">
-                                    Apply Coupon
-                                </button>
+            <div class="row add_top_30 flex-sm-row-reverse cart_actions">
+                {{-- <div class="col-sm-4 text-end">
+                        <button type="button" class="btn_1 gray">
+                            Update Cart
+                        </button>
+                    </div> --}}
+                <div class="col-sm-8">
+                    <div class="apply-coupon">
+                        <div class="form-group">
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <input type="text" name="coupon-code" value="" placeholder="Promo code"
+                                        class="form-control" />
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn_1 outline">
+                                        Apply Coupon
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @else
+            @component('client.components.404')
+                @section('desc', 'Keranjang Anda Kosong, Silakan Berbelanja Dulu')
+            @endcomponent
+            <div class="d-flex justify-content-center w-100 mb-5">
+                <a href="{{ route('home') }}" class="btn_1">
+                    Belanja Sekarang
+                </a>
+            </div>
+        @endif
         <!-- /cart_actions -->
     </div>
     <!-- /container -->
 
-    <div class="box_cart">
-        <div class="container">
-            <div class="row justify-content-end">
-                <div class="col-xl-4 col-lg-4 col-md-6">
-                    <ul>
-                        <li>
-                            <span>Subtotal</span>
-                            <div id="subtotal_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
-                        </li>
-                        <li><span>Shipping</span> Rp 0</li>
-                        <li><span>Total</span>
-                            <div id="total_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
-                        </li>
-                    </ul>
-                    <a href="{{ url('/checkout') }}" class="btn_1 full-width cart">Proceed to Checkout</a>
+    @if (count($list_cart))
+        <div class="box_cart">
+            <div class="container">
+                <div class="row justify-content-end">
+                    <div class="col-xl-4 col-lg-4 col-md-6">
+                        <ul>
+                            <li>
+                                <span>Subtotal</span>
+                                <div id="subtotal_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
+                            </li>
+                            <li><span>Shipping</span> Free</li>
+                            <li><span>Total</span>
+                                <div id="total_cart">Rp {{ number_format($subtotal, 0, ',', '.') }}</div>
+                            </li>
+                        </ul>
+                        <a href="{{ route('checkout') }}" class="btn_1 full-width cart">Proceed to Checkout</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
     <!-- /box_cart -->
 </main>
 <!--/main-->

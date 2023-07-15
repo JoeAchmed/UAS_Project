@@ -78,8 +78,8 @@
         @foreach ($categories as $item)    
             <li>
                 <a href="{{ url('/products?cat_id=' . $item->id) }}" class="img_container" key="{{ $item->id }}">
-                    <img src="{{ asset('client/img/banners_cat_placeholder.jpg') }}"
-                        data-src="{{ asset('client/img/banner_1.jpg') }}" alt="" class="lazy">
+                    <img src="{{ asset('storage') . '/' . $item->image_url }}"
+                        data-src="{{ asset('storage') . '/' . $item->image_url }}" alt="" class="lazy">
                     <div class="short_info opacity-mask" data-opacity-mask="rgba(0, 0, 0, 0.5)">
                         <h3>{{ $item->name }}</h3>
                         <div><span class="btn_1">Shop Now</span></div>
@@ -145,7 +145,7 @@
                                     title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to
                                         compare</span></a></li>
                             <li>
-                                <form method="POST" action="{{ route('create.order') }}">
+                                <form method="POST" action="{{ route('create.cart') }}">
                                     <a class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
                                         title="Add to cart">
                                         @csrf
@@ -167,7 +167,7 @@
     </div>
     <!-- /container -->
 
-    <div class="featured lazy" data-bg="url({{ asset('client/img/featured_home.jpg') }})">
+    <div class="featured lazy" data-bg="url({{ asset('storage/products/thumbnail-feature.jpeg') }})">
         <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.5)">
             <div class="container margin_60">
                 <div class="row justify-content-center justify-content-md-start">

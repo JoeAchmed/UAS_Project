@@ -19,7 +19,7 @@
                 @endcomponent
             </div>
         </div>
-        <img src="{{ asset('client/img/bg_cat_shoes.jpg') }}" class="img-fluid" alt="">
+        <img src="{{ asset('storage/products/thumbnail-products.jpeg') }}" class="img-fluid" alt="">
     </div>
     <!-- /top_banner -->
 
