@@ -36,12 +36,16 @@ Route::post('/logout-dbo', [DashboardController::class, 'logout'])->name('admin.
 Route::group(['middleware' => 'auth-dbo'], function () {
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::get('/dbo/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
-    Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
+    // Produk
+    Route::get('/dbo/produk', [DashboardController::class, 'products'])->name('admin.produk.list');
+    Route::post('/dbo/produk', [DashboardController::class, 'product_datas'])->name('admin.produk.datas');
+    // Kategori Produk
+    Route::get('/dbo/produk/kategori', [DashboardController::class, 'categories'])->name('admin.produk.kategori.list');
+    Route::post('/dbo/produk/kategori', [DashboardController::class, 'category_datas'])->name('admin.produk.kategori.datas');
+
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
 });
-
 
 Route::group(['middleware' => ['auth']], function () {
     // Client

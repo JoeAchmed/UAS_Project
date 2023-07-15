@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProductCategoryAdmin;
+use Yajra\DataTables\Facades\Datatables;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -45,7 +47,6 @@ class DashboardController extends Controller
         if ($validation->passes()) {
             $user = User::where('email', '=', $email)->first();
 
-
             if ($user) {
                 if ($user->role == 'admin' || $user->role == 'manager') {
                     if (Hash::check($password, $user->password)) {
@@ -74,9 +75,7 @@ class DashboardController extends Controller
         return redirect(route('admin.login'));
     }
 
-    /**
-     * Display a listing of the resource.
-     */
+
     public function productList()
     {
         // menampilkan page list produk admin
@@ -86,10 +85,27 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function categoryProduct()
+    public function categories(Request $request)
     {
         // menampilkan page kategori produk admin
+        if ($request->ajax()) {
+            $data = ProductCategoryAdmin::select('*');
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" class="edit btn btn-success btn-sm">Edit</a> <a href="javascript:void(0)" class="delete btn btn-danger btn-sm">Delete</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         return view('admin.produk.kategori');
+    }
+
+    public function category_datas(Request $request)
+    {
+        
     }
 
     /**
