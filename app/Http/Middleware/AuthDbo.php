@@ -3,9 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Facade;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Session;
 
-class AuthDbo
+class AuthDbo extends Facade
 {
     /**
      * Handle an incoming request.
@@ -14,7 +16,8 @@ class AuthDbo
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+
+    public function handle($request, Closure $next, $role)
     {
         // Check if user is authenticated
         if (!Session::get('user_id')) {
@@ -24,7 +27,14 @@ class AuthDbo
             // return abort(401);
         }
 
+        $roles = explode('-', $role);
+        foreach ($roles as $group) {
+            if (Session::get('role') == $group) {
+                return $next($request);
+            }
+        }
+
         // User is authenticated, proceed with the request
-        return $next($request);
+        return redirect()->route('admin.login');
     }
 }

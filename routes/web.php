@@ -33,10 +33,13 @@ Route::get('/login-dbo', [DashboardController::class, 'login'])->name('admin.log
 Route::post('/post-login-dbo', [DashboardController::class, 'postLogin'])->name('admin.postLogin');
 Route::post('/logout-dbo', [DashboardController::class, 'logout'])->name('admin.logout');
 
-Route::group(['middleware' => 'auth-dbo'], function () {
+Route::group(['middleware' => 'auth-dbo:admin-manager'], function () {
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
-    
+
+    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');
+    Route::get('/dbo/user/admin', [DashboardController::class, 'usersAdmin'])->name('admin.user.admin');
+
     // Produk
     Route::get('/dbo/produk', [DashboardController::class, 'products'])->name('admin.produk.list');
     Route::get('/dbo/produk/tambah', [DashboardController::class, 'product_add'])->name('admin.produk.add');
@@ -54,8 +57,8 @@ Route::group(['middleware' => 'auth-dbo'], function () {
     Route::post('/dbo/produk/update-kategori', [DashboardController::class, 'category_update'])->name('admin.produk.kategori.update');
 
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
-    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');
-    Route::get('/dbo/user/admin', [DashboardController::class, 'usersAdmin'])->name('admin.user.admin');
+    Route::get('/dbo/pesanan/ubah-pesanan/{params:id}', [DashboardController::class, 'orders_edit'])->name('admin.pesanan.edit');
+    Route::post('/dbo/produk/ubah-pesanan', [DashboardController::class, 'update_status_order'])->name('admin.pesanan.ubah_status');
 });
 
 Route::group(['middleware' => ['auth']], function () {

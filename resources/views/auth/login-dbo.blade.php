@@ -50,7 +50,7 @@
                         </g>
                     </svg>
                 </span>
-                <span class="app-brand-text demo text-body fw-bolder">Sneat</span>
+                <span class="app-brand-text demo text-body fw-bolder">Allia Store</span>
             </a>
         </div>
         <!-- /Logo -->

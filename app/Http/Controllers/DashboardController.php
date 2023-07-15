@@ -6,11 +6,12 @@ use App\Models\ProductCategoryAdmin;
 use Yajra\DataTables\Facades\Datatables;
 use App\Models\OrdersAdmin;
 use App\Models\ProductAdmin;
-use App\Models\OrdersItemAdmin;
+// use App\Models\OrdersItemAdmin;
 use App\Models\ProductClient;
 use App\Models\ProductImages;
 use App\Models\User;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -22,6 +23,8 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        if (Session::get('role') !== "manager") return redirect()->route('admin.produk.list');
+
         $categories = ProductClient::getCategoryProduct();
         $orders = OrdersAdmin::getOrders();
         $total_sales = OrdersAdmin::getTotalSales();
@@ -353,23 +356,53 @@ class DashboardController extends Controller
     {
         // menampilkan page kategori produk admin
         if ($request->ajax()) {
-            $data = OrdersItemAdmin::join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->join('products', 'order_items.prod_id', '=', 'products.id')
-                ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-                ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
-                ->get();
+            // $data = OrdersItemAdmin::join('orders', 'order_items.order_id', '=', 'orders.id')
+            //     ->join('products', 'order_items.prod_id', '=', 'products.id')
+            //     ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+            //     ->join('users', 'orders.user_id', '=', 'users.id')
+            //     ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*', 'users.name AS customer_name', 'users.email AS customer_email', 'users.phone_number AS customer_phone', 'users.address AS customer_address')
+            //     ->get();
 
-            return Datatables::of($data)
+            $dataOrders = OrdersAdmin::join('users', 'orders.user_id', '=', 'users.id')
+            ->select('orders.*', 'users.name AS customer_name', 'users.email AS customer_email', 'users.phone_number AS customer_phone', 'users.address AS customer_address')
+            ->get();
+
+            return Datatables::of($dataOrders)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete"><i class="bx bx-trash"></i></a>';
+                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i> Ubah Status</a><form id="editForm" action="' . route('admin.pesanan.ubah_status') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('detail', function ($row) {
+                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-info btn-sm" id="btnDetail"><i class="bx bx-show"></i> Lihat</a>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action', 'detail']) // <-- Add the 'detail' column here
                 ->make(true);
         }
 
         return view('admin.pesanan.list');
+    }
+
+    public function orders_edit(OrdersAdmin $params)
+    {
+        $data = OrdersAdmin::where('id', $params->id)->first();
+        echo json_encode($data);
+    }
+
+    public function update_status_order(Request $request)
+    {
+        try {
+            $orders = OrdersAdmin::where('id', $request->id)->first();
+            $orders->status = $request->status;
+            $orders->save();
+            
+            Session::flash('success', 'Status Pesanan Berhasil diubah!');
+            return response()->json(['success' => true]);
+
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'msg' => 'Kategori tidak ada!']);
+        }
     }
 
     /**
@@ -378,6 +411,8 @@ class DashboardController extends Controller
     public function usersCustomer(Request $request)
     {
         // menampilkan page kategori produk admin
+        if (Session::get('role') !== "manager") return redirect()->route('admin.produk.list');
+
         if ($request->ajax()) {
             $roles = ['pelanggan'];
             $data = User::select('*')->whereIn('role', $roles)->get();
@@ -397,6 +432,8 @@ class DashboardController extends Controller
 
     public function usersAdmin(Request $request)
     {
+        if (Session::get('role') !== "manager") return redirect()->route('admin.produk.list');
+
         // menampilkan page kategori produk admin
         if ($request->ajax()) {
             $roles = ['admin', 'manager'];
