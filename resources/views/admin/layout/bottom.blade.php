@@ -69,6 +69,24 @@
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+<script>
+  function formatPrice(value) {
+      if (!value) return '';
+      var number = parseInt(value);
+      var formattedValue = number.toLocaleString('id-ID');
+      return formattedValue;
+  }
+  
+  $(function() {
+    $('.iprice').on('input', function() {
+        var value = $(this).val();
+        var numericValue = value.replace(/[^0-9]/g, '');
+        var formattedValue = formatPrice(numericValue);
+
+        $(this).val(formattedValue);
+    });
+  });
+</script>
 @yield('js')
 </body>
 

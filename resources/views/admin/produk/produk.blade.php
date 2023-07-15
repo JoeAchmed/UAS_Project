@@ -1,186 +1,110 @@
-@extends('admin.layout.appadmin', ['title' => "Produk"])
+@extends('admin.layout.appadmin', ['title' => 'Produk'])
 @section('content')
 
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> /</span> List Produk
+<span class="text-muted fw-bold"><a href="{{ route('admin.produk.list') }}">Produk</a>
+    /</span> List Produk
 @endsection
 
 <!-- Hoverable Table rows -->
 <div class="card">
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="card-header">Data Produk</h5>
-        <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
+        <button type="button" class="btn btn-primary mx-4" style="max-height: 42px" id="btnAdd">
             <i class="menu-icon tf-icons bx bx-plus"></i>
             Tambah
         </button>
     </div>
-    <div class="table-responsive text-nowrap">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th>Project</th>
-                    <th>Client</th>
-                    <th>Users</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-                <tr>
-                    <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-                    <td>Albert Cook</td>
-                    <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Christina Parker">
-                                <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-primary me-1">Active</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
-                                    Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i>
-                                    Delete</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>React Project</strong></td>
-                    <td>Barry Hunter</td>
-                    <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Christina Parker">
-                                <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-success me-1">Completed</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-edit-alt me-1"></i>
-                                    Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i>
-                                    Delete</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>VueJs Project</strong></td>
-                    <td>Trevor Baker</td>
-                    <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Christina Parker">
-                                <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i
-                                        class="bx bx-edit-alt me-1"></i> Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i>
-                                    Delete</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>Bootstrap Project</strong>
-                    </td>
-                    <td>Jerry Milton</td>
-                    <td>
-                        <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Lilian Fuller">
-                                <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Sophia Wilkerson">
-                                <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
-                                class="avatar avatar-xs pull-up" title="Christina Parker">
-                                <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar"
-                                    class="rounded-circle" />
-                            </li>
-                        </ul>
-                    </td>
-                    <td><span class="badge bg-label-warning me-1">Pending</span></td>
-                    <td>
-                        <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown">
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                                <a class="dropdown-item" href="javascript:void(0);"><i
-                                        class="bx bx-edit-alt me-1"></i> Edit</a>
-                                <a class="dropdown-item" href="javascript:void(0);"><i class="bx bx-trash me-1"></i>
-                                    Delete</a>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="container mb-3">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover" id="tableData">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!--/ Hoverable Table rows -->
+@endsection
+
+@section('js')
+@include('admin.components.alerts')
+<script>
+    var tableData;
+
+    $(function($) {
+        tableData = $('#tableData').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.produk.list') }}",
+            columns: [
+                {data: 'DT_RowIndex', orderable: false, searchable: false},
+                {data: 'name', name: 'name'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+            ]
+        });
+
+        $("#btnAdd").on("click", function() {
+            window.location.href = "{{ route('admin.produk.add') }}";
+        });
+
+        $(document).on('click', '#btnDelete', function() {
+            Swal.fire({
+                title: 'Anda yakin?',
+                text: "Anda yakin ingin menghapus data ini?",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#F46A6A',
+                confirmButtonColor: '#34C38F',
+                confirmButtonText: 'Ya',
+                showLoaderOnConfirm: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Memproses Data',
+                        text: 'Tunggu sebentar...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+
+                    var token = $('#deleteForm input[name="_token"]').val();
+                    var id = $(this).attr('data-id');
+
+                    $.ajax({
+                        url: "{{ route('admin.produk.kategori.delete') }}",
+                        type: 'POST',
+                        dataType: 'JSON',
+                        data: {
+                            _token: token,
+                            id: id
+                        },
+                        success: function(res) {
+                            if (res.success) {
+                                window.location.href = "{{ route('admin.produk.kategori.list') }}";
+                            } else {
+                                Swal.close();
+                                errorMsg(res.msg);
+                            }
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            Swal.close();
+                            errorMsg(jqXHR.status + " - " + errorThrown);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endsection

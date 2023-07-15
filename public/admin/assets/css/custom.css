@@ -9,3 +9,67 @@
 .swal2-container {
     z-index: 2060 !important;
 }
+
+.pointer {
+    cursor: pointer !important;
+}
+
+.img-custom {
+    object-fit: cover;
+    object-position: center;
+    height: 250px;
+    width: 100%;
+}
+
+.image-choose {
+    border-radius: .25rem;
+    width: 100%;
+    height: 200px;
+    background-color: #e9ecef;
+    cursor: pointer;
+}
+
+.image-loader {
+    border-radius: .25rem;
+    width: 100%;
+    height: 200px;
+}
+
+.font-choose {
+    font-size: 100px;
+    margin-top: 45px;
+}
+
+.preview {
+    overflow: hidden;
+    width: 200px;
+    height: 200px;
+    margin: 0px 10px 0px 10px;
+    border: 1px solid red;
+}
+
+.sort {
+    display: grid;
+    gap: 10px;
+    grid-auto-columns: auto;
+    grid-template-areas: 'a a a a';
+}
+
+.sort:hover {
+    cursor: all-scroll;
+}
+
+.sort>.sort-grid {
+    display: inline-block;
+    position: relative;
+    height: fit-content;
+    background-color: transparent;
+    color: #333;
+    text-align: center;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: .25rem;
+}
+
+.sort>.sort-grid > img {
+    border-radius: .25rem;
+}
