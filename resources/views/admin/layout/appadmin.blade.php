@@ -9,7 +9,7 @@
     <!-- Content wrapper -->
     <div class="content-wrapper">
       <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="fw-bold @yield('style-title')">@yield('title')</h4>
+        <h6 class="fw-bold @yield('style-title')">@yield('title')</h6>
         @yield('content')
       </div>
       

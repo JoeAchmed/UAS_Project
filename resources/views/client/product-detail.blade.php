@@ -11,39 +11,17 @@
 
 @section('content')
     <div class="container margin_30">
-        <div class="countdown_inner">
-            -20% This offer ends in
-            <div data-countdown="2019/05/15" class="countdown"></div>
-        </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="all">
                     <div class="slider">
                         <div class="owl-carousel owl-theme main">
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/1.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/2.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/3.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/4.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/5.jpg') }});
-                          "
-                                class="item-box"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/6.jpg') }});
-                          "
-                                class="item-box"></div>
+                            @foreach ($product_images as $item)
+                                <div style="
+                            background-image: url({{ asset('storage') . '/' . $item->path }});
+                        "
+                                    class="item-box"></div>
+                            @endforeach
                         </div>
                         <div class="left nonl">
                             <i class="ti-angle-left"></i>
@@ -54,30 +32,12 @@
                     </div>
                     <div class="slider-two">
                         <div class="owl-carousel owl-theme thumbs">
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/1.jpg') }});
-                          "
-                                class="item active"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/2.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/3.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/4.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/5.jpg') }});
-                          "
-                                class="item"></div>
-                            <div style="
-                              background-image: url({{ asset('client/img/products/shoes/6.jpg') }});
-                          "
-                                class="item"></div>
+                            @foreach ($product_images as $item)
+                                <div style="
+                            background-image: url({{ asset('storage') . '/' . $item->path }});
+                        "
+                                    class="item active"></div>
+                            @endforeach
                         </div>
                         <div class="left-t nonl-t"></div>
                         <div class="right-t"></div>
@@ -85,88 +45,111 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="breadcrumbs">
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li>Page active</li>
-                    </ul>
-                </div>
+                @component('client.components.breadcrumb')
+                    @section('page-name', 'Detail Product')
+                @endcomponent
                 <!-- /page_header -->
-                <div class="prod_info">
-                    <h1>Armor Air X Fear</h1>
-                    <span class="rating"><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star"></i><em>4
-                            reviews</em></span>
-                    <p>
-                        <small>SKU: MTKRY-001</small><br />Sed ex
-                        labitur adolescens scriptorem. Te saepe
-                        verear tibique sed. Et wisi ridens vix,
-                        lorem iudico blandit mel cu. Ex vel sint
-                        zril oportere, amet wisi aperiri te cum.
-                    </p>
-                    <div class="prod_options">
-                        <div class="row">
-                            <label class="col-xl-5 col-lg-5 col-md-6 col-6 pt-0"><strong>Color</strong></label>
-                            <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
-                                <ul>
-                                    <li>
-                                        <a href="#0" class="color color_1 active"></a>
-                                    </li>
-                                    <li>
-                                        <a href="#0" class="color color_2"></a>
-                                    </li>
-                                    <li>
-                                        <a href="#0" class="color color_3"></a>
-                                    </li>
-                                    <li>
-                                        <a href="#0" class="color color_4"></a>
-                                    </li>
-                                </ul>
+                <form method="POST" action="{{ route('create.cart') }}">
+                    @csrf
+                    <div class="prod_info">
+                        <h1>{{ $product->name }}</h1>
+
+                        <span class="rating mt-lg-2">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $product->rating)
+                                    <i class="icon-star voted"></i>
+                                @else
+                                    <i class="icon-star"></i>
+                                @endif
+                            @endfor
+                            <em>{{ number_format($product->rating, 0) }}
+                                reviews</em>
+                        </span>
+                        <p>
+                            <small>SKU: {{ $product->sku }}</small>
+                            <br />
+                            {{ $product->description }}
+                        </p>
+                        <div class="prod_options">
+                            <div class="row">
+                                <label class="col-xl-5 col-lg-5 col-md-6 col-6 pt-0"><strong>Color</strong></label>
+                                <div class="col-xl-4 col-lg-5 col-md-6 col-6 colors">
+                                    <ul>
+                                        <li>
+                                            <a href="#0" class="color color_1 active"></a>
+                                        </li>
+                                        <li>
+                                            <a href="#0" class="color color_2"></a>
+                                        </li>
+                                        <li>
+                                            <a href="#0" class="color color_3"></a>
+                                        </li>
+                                        <li>
+                                            <a href="#0" class="color color_4"></a>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Size</strong> - Size Guide
-                                <a href="#0" data-bs-toggle="modal" data-bs-target="#size-modal"><i
-                                        class="ti-help-alt"></i></a></label>
-                            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-                                <div class="custom-select-form">
-                                    <select class="wide">
-                                        <option value="" selected>
-                                            Small (S)
-                                        </option>
-                                        <option value="">M</option>
-                                        <option value=" ">L</option>
-                                        <option value=" ">
-                                            XL
-                                        </option>
-                                    </select>
+                            <div class="row">
+                                <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Size</strong> - Size Guide
+                                    <a href="#0" data-bs-toggle="modal" data-bs-target="#size-modal"><i
+                                            class="ti-help-alt"></i></a></label>
+                                <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+                                    <div class="custom-select-form">
+                                        <select disabled name="size" id="size" class="wide">
+                                            <option value="S" selected>
+                                                Small (S)
+                                            </option>
+                                            <option value="M">Medium (M)</option>
+                                            <option value="L">Large (L)</option>
+                                            <option value="XL">
+                                                XL (X-Large)
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Quantity</strong></label>
+                                <div class="col-xl-4 col-lg-5 col-md-6 col-6">
+
+                                    <div class="numbers-row">
+                                        <input type="number" id="qty" min="1" value="1" class="qty2"
+                                            name="qty" max="100" style="width: 64px" />
+                                        <div data-id="{{ $product->id }}" class="inc button_inc">+</div>
+                                        <div data-id="{{ $product->id }}" class="dec button_inc">-</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-xl-5 col-lg-5 col-md-6 col-6"><strong>Quantity</strong></label>
-                            <div class="col-xl-4 col-lg-5 col-md-6 col-6">
-                                <div class="numbers-row">
-                                    <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1" />
+                            <div class="col-lg-5 col-md-6">
+                                <div class="price_main">
+                                    @if ($product->discount)
+                                        <span class="new_price">Rp
+                                            {{ number_format($product->discount_price, 0, ',', '.') }}</span><span
+                                            class="percentage">-{{ number_format($product->discount, 0) }}%</span>
+                                        <span class="old_price">Rp
+                                            {{ number_format($product->sell_price, 0, ',', '.') }}</span>
+                                    @else
+                                        <span class="new_price">Rp
+                                            {{ number_format($product->sell_price, 0, ',', '.') }}</span>
+                                    @endif
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-5 col-md-6">
-                            <div class="price_main">
-                                <span class="new_price">$148.00</span><span class="percentage">-20%</span>
-                                <span class="old_price">$160.00</span>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-md-6">
-                            <div class="btn_add_to_cart">
-                                <a href="{{ url('/cart') }}" class="btn_1">Add to Cart</a>
+                            <div class="col-lg-4 col-md-6">
+
+                                <input type="hidden" name="prod_id" value="{{ $product->id }}" id="prod_id">
+
+                                <button type="submit" class="btn-add-cart">
+                                    <div class="btn_add_to_cart">
+                                        <a class="btn_1">Add to Cart</a>
+                                    </div>
+                                </button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
                 <!-- /prod_info -->
                 <div class="product_actions">
                     <ul>
@@ -216,44 +199,7 @@
                             <div class="row justify-content-between">
                                 <div class="col-lg-6">
                                     <h3>Details</h3>
-                                    <p>
-                                        Lorem ipsum dolor sit amet,
-                                        in eleifend
-                                        <strong>inimicus
-                                            elaboraret</strong>
-                                        his, harum efficiendi mel
-                                        ne. Sale percipit vituperata
-                                        ex mel, sea ne essent
-                                        aeterno sanctus, nam ea
-                                        laoreet civibus electram. Ea
-                                        vis eius explicari. Quot
-                                        iuvaret ad has.
-                                    </p>
-                                    <p>
-                                        Vis ei ipsum
-                                        conclusionemque. Te enim
-                                        suscipit recusabo mea, ne
-                                        vis mazim aliquando, everti
-                                        insolens at sit. Cu vel modo
-                                        unum quaestio, in vide dicta
-                                        has. Ut his laudem explicari
-                                        adversarium, nisl
-                                        <strong>laboramus
-                                            hendrerit</strong>
-                                        te his, alia lobortis vis
-                                        ea.
-                                    </p>
-                                    <p>
-                                        Perfecto eleifend sea no, cu
-                                        audire voluptatibus eam. An
-                                        alii praesent sit, nobis
-                                        numquam principes ea eos, cu
-                                        autem constituto
-                                        suscipiantur eam. Ex graeci
-                                        elaboraret pro. Mei te omnis
-                                        tantas, nobis viderer
-                                        vivendo ex has.
-                                    </p>
+                                    {{ $product->description }}
                                 </div>
                                 <div class="col-lg-5">
                                     <h3>Specifications</h3>
@@ -273,21 +219,21 @@
                                                         <strong>Size</strong>
                                                     </td>
                                                     <td>
-                                                        150x100x100
+                                                        {{ $product->size ? $product->size : '-' }}
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <strong>Weight</strong>
                                                     </td>
-                                                    <td>0.6kg</td>
+                                                    <td>{{ $product->weight ? $product->weight : '0' }} kg</td>
                                                 </tr>
                                                 <tr>
                                                     <td>
                                                         <strong>Manifacturer</strong>
                                                     </td>
                                                     <td>
-                                                        Manifacturer
+                                                        {{ $product->manifacturer ? $product->manifacturer : '-' }}
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -436,193 +382,72 @@
             </p>
         </div>
         <div class="owl-carousel owl-theme products_carousel">
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon new">New</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
-                                data-src="{{ asset('client/img/products/shoes/4.jpg') }}" alt="" />
+            @foreach ($products as $p)
+                <div class="item" key="{{ $p->id }}">
+                    <div class="grid_item">
+                        <figure>
+                            <span class="ribbon new">{{ $p->category_name }}</span>
+                            @if ($p->discount)
+                                <span class="ribbon off"
+                                    style="right: 10px; left: auto">-{{ number_format($p->discount, 0) }}%</span>
+                            @endif
+                            <a href="{{ route('product_detail', $p->slug) }}">
+                                <img class="img-fluid lazy img-product-fit"
+                                    src="{{ asset('storage') . '/' . $p->thumbnail }}"
+                                    data-src="{{ asset('storage') . '/' . $p->thumbnail }}" alt="">
+                                <img class="img-fluid lazy img-product-fit"
+                                    src="{{ asset('storage') . '/' . $p->thumbnail }}"
+                                    data-src="{{ asset('storage') . '/' . $p->thumbnail }}" alt="">
+                            </a>
+                            {{-- <div data-countdown="2019/05/15" class="countdown"></div> --}}
+                        </figure>
+                        <div class="rating">
+                            @for ($i = 1; $i <= 5; $i++)
+                                @if ($i <= $p->rating)
+                                    <i class="icon-star voted"></i>
+                                @else
+                                    <i class="icon-star"></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <a href="{{ route('product_detail', $p->slug) }}">
+                            <h3>{{ $p->name }}</h3>
                         </a>
-                    </figure>
-                    <div class="rating">
-                        <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star"></i>
+                        <div class="price_box">
+                            @if ($p->discount)
+                                <span class="new_price">Rp {{ number_format($p->discount_price, 0, ',', '.') }}</span>
+                                <span class="old_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
+                            @else
+                                <span class="new_price">Rp {{ number_format($p->sell_price, 0, ',', '.') }}</span>
+                            @endif
+                        </div>
+                        <ul>
+                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
+                            </li>
+                            <li><a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
+                                    title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to
+                                        compare</span></a></li>
+                            <li>
+                                <form method="POST" action="{{ route('create.cart') }}">
+                                    <a class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
+                                        title="Add to cart">
+                                        @csrf
+                                        <input type="hidden" name="prod_id" value="{{ $p->id }}"
+                                            id="prod_id">
+                                        <button type="submit" class="btn-add-cart">
+                                            <i class="ti-shopping-cart"></i>
+                                            <span>Add to cart</span>
+                                        </button>
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
                     </div>
-                    <a href="product-detail-1.html">
-                        <h3>ACG React Terra</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$110.00</span>
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
-                        </li>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-                        </li>
-                    </ul>
+                    <!-- /grid_item -->
                 </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon new">New</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
-                                data-src="{{ asset('client/img/products/shoes/5.jpg') }}" alt="" />
-                        </a>
-                    </figure>
-                    <div class="rating">
-                        <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star"></i>
-                    </div>
-                    <a href="product-detail-1.html">
-                        <h3>Air Zoom Alpha</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$140.00</span>
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
-                        </li>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon hot">Hot</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
-                                data-src="{{ asset('client/img/products/shoes/8.jpg') }}" alt="" />
-                        </a>
-                    </figure>
-                    <div class="rating">
-                        <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star"></i>
-                    </div>
-                    <a href="product-detail-1.html">
-                        <h3>Air Color 720</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$120.00</span>
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
-                        </li>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon off">-30%</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
-                                data-src="{{ asset('client/img/products/shoes/2.jpg') }}" alt="" />
-                        </a>
-                    </figure>
-                    <div class="rating">
-                        <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star"></i>
-                    </div>
-                    <a href="product-detail-1.html">
-                        <h3>Okwahn II</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$90.00</span>
-                        <span class="old_price">$170.00</span>
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
-                        </li>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
-            <div class="item">
-                <div class="grid_item">
-                    <span class="ribbon off">-50%</span>
-                    <figure>
-                        <a href="product-detail-1.html">
-                            <img class="owl-lazy" src="{{ asset('client/img/products/product_placeholder_square_medium.jpg') }}"
-                                data-src="{{ asset('client/img/products/shoes/3.jpg') }}" alt="" />
-                        </a>
-                    </figure>
-                    <div class="rating">
-                        <i class="icon-star voted"></i><i class="icon-star voted"></i><i class="icon-star voted"></i><i
-                            class="icon-star voted"></i><i class="icon-star"></i>
-                    </div>
-                    <a href="product-detail-1.html">
-                        <h3>Air Wildwood ACG</h3>
-                    </a>
-                    <div class="price_box">
-                        <span class="new_price">$75.00</span>
-                        <span class="old_price">$155.00</span>
-                    </div>
-                    <ul>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to favorites"><i class="ti-heart"></i><span>Add to favorites</span></a>
-                        </li>
-                        <li>
-                            <a href="#0" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to compare"><i class="ti-control-shuffle"></i><span>Add to compare</span></a>
-                        </li>
-                        <li>
-                            <a href="{{ url('/cart') }}" class="tooltip-1" data-bs-toggle="tooltip" data-bs-placement="left"
-                                title="Add to cart"><i class="ti-shopping-cart"></i><span>Add to cart</span></a>
-                        </li>
-                    </ul>
-                </div>
-                <!-- /grid_item -->
-            </div>
-            <!-- /item -->
+                <!-- /item -->
+            @endforeach
         </div>
         <!-- /products_carousel -->
     </div>
@@ -668,3 +493,43 @@
     <!-- SPECIFIC SCRIPTS -->
     <script src="{{ asset('client/js/carousel_with_thumbs.js') }}"></script>
 @endsection
+
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        var flag = "inc";
+        var order_id = 0;
+        var loading = false;
+        var qty = 0;
+
+        // Event listener untuk tombol "+"
+        $(".inc").on("click", function(e) {
+            e.preventDefault();
+            var prod_value = this.getAttribute('data-id');
+
+            if (!loading) {
+                flag = "inc";
+                qty = document.getElementById('qty').value;
+                qty++;
+                document.getElementById('qty').value = qty;
+            }
+        });
+
+        // Tombol "-"
+        $(".dec").on("click", function(e) {
+            e.preventDefault();
+
+            var prod_value = this.getAttribute('data-id');
+            qty = document.getElementById('qty').value;
+
+            // Hindari pengurangan ketika sudah mencapai nilai minimum
+            if (Number(qty || 0) > 1 && !loading) {
+                flag = "dec";
+                order_id = prod_value;
+                qty--;
+                document.getElementById('qty').value = qty;
+            }
+        });
+    })
+</script>

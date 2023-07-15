@@ -16,16 +16,18 @@
 }
 
 .table.cart-list th:nth-child(1) {
-  width: 70%;
+  width: 55%;
 }
 .table.cart-list th:nth-child(2) {
   width: 15%;
 }
 .table.cart-list th:nth-child(3) {
-  width: 20%;
+  text-align: center;
+  width: 15%;
 }
 .table.cart-list th:nth-child(4) {
-  width: 5%;
+  text-align: center;
+  width: 25%;
 }
 
 .table.cart-list td {
@@ -35,11 +37,12 @@
 .table.cart-list td strong {
   font-weight: 500;
 }
-.table.cart-list td.options a {
+.table.cart-list td.options button {
   display: inline-block;
   margin-right: 10px;
+  margin-top: 18px;
 }
-.table.cart-list td.options a i {
+.table.cart-list td.options button i {
   font-size: 18px;
   font-size: 1.125rem;
 }
@@ -222,4 +225,11 @@
   color: #ff5353;
   font-size: 21px;
   font-size: 1.3125rem;
+}
+.btn-delete {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
 }

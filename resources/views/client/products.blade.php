@@ -13,17 +13,13 @@
     <div class="top_banner">
         <div class="opacity-mask d-flex align-items-center" data-opacity-mask="rgba(0, 0, 0, 0.3)">
             <div class="container">
-                <div class="breadcrumbs">
-                    <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Category</a></li>
-                        <li>Page active</li>
-                    </ul>
-                </div>
-                <h1>Shoes - Grid listing</h1>
+                @component('client.components.breadcrumb')
+                    @section('page-name', 'Products')
+                    @section('page-title', 'Products')
+                @endcomponent
             </div>
         </div>
-        <img src="{{ asset('client/img/bg_cat_shoes.jpg') }}" class="img-fluid" alt="">
+        <img src="{{ asset('storage/products/thumbnail-products.jpeg') }}" class="img-fluid" alt="">
     </div>
     <!-- /top_banner -->
 

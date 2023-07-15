@@ -1,239 +1,225 @@
-
-@extends('admin.layout.appadmin')
+@extends('admin.layout.appadmin', ['title' => 'Daftar Pesanan'])
 @section('content')
-  {{-- additional css --}}
-  @section('style-title')
-  py-3 mb-4
-  @endsection
-  
-  @section('title')
-    <span class="text-muted fw-light">Tables /</span> List Pesanan
-  @endsection
+@section('title')
+    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / </span> Pesanan
+@endsection
 
-  <!-- Hoverable Table rows -->
-  <div class="card">
-    <h5 class="card-header">Hoverable rows</h5>
-    <div class="table-responsive text-nowrap">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Project</th>
-            <th>Client</th>
-            <th>Users</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody class="table-border-bottom-0">
-          <tr>
-            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>Angular Project</strong></td>
-            <td>Albert Cook</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-primary me-1">Active</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><i class="fab fa-react fa-lg text-info me-3"></i> <strong>React Project</strong></td>
-            <td>Barry Hunter</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-success me-1">Completed</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><i class="fab fa-vuejs fa-lg text-success me-3"></i> <strong>VueJs Project</strong></td>
-            <td>Trevor Baker</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-info me-1">Scheduled</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <i class="fab fa-bootstrap fa-lg text-primary me-3"></i> <strong>Bootstrap Project</strong>
-            </td>
-            <td>Jerry Milton</td>
-            <td>
-              <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Lilian Fuller"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/5.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Sophia Wilkerson"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/6.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-                <li
-                  data-bs-toggle="tooltip"
-                  data-popup="tooltip-custom"
-                  data-bs-placement="top"
-                  class="avatar avatar-xs pull-up"
-                  title="Christina Parker"
-                >
-                  <img src="{{ asset('admin/assets/img/avatars/7.png') }}" alt="Avatar" class="rounded-circle" />
-                </li>
-              </ul>
-            </td>
-            <td><span class="badge bg-label-warning me-1">Pending</span></td>
-            <td>
-              <div class="dropdown">
-                <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div class="dropdown-menu">
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                  >
-                  <a class="dropdown-item" href="javascript:void(0);"
-                    ><i class="bx bx-trash me-1"></i> Delete</a
-                  >
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+<!-- Hoverable Table rows -->
+<div class="card">
+    <div class="d-flex justify-content-between align-items-center">
+        <h5 class="card-header">Data Pesanan</h5>
     </div>
-  </div>
-  <!--/ Hoverable Table rows -->
+    <div class="container mb-3">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover" id="tableData">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Nama Pembeli</th>
+                        <th>Email</th>
+                        <th>Nomer HP</th>
+                        {{-- <th>Nama Produk</th> --}}
+                        {{-- <th>Harga Awal</th> --}}
+                        {{-- <th>Discount</th> --}}
+                        {{-- <th>Harga Akhir</th> --}}
+                        {{-- <th>Jumlah Barang</th> --}}
+                        <th>Subtotal</th>
+                        <th>Tanggal Transaksi</th>
+                        <th>Status Pesanan</th>
+                        <th>Detail Pesanan</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{{-- Modal --}}
+<div class="modal fade" id="showModal" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="showModalTitle">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form autocomplete="off" id="form">
+                    @csrf
+                    <input type="hidden" name="id" id="id">
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status Pesanan</label>
+                        <input type="text" class="form-control" name="status" id="status" value="done"
+                            placeholder="Masukan Nama Kategori" disabled />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="btnSubmit">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/ Hoverable Table rows -->
+@endsection
+@section('js')
+<script>
+    var tableData;
+
+    $(function($) {
+        $("input").on('keypress', function() {
+            $(this).removeClass('is-invalid');
+        });
+
+        tableData = $('#tableData').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('admin.pesanan.list') }}",
+            columns: [{
+                    data: 'invoice',
+                    name: 'invoice',
+                    className: 'text-center', // Kolom id akan berada di tengah
+                    render: function(data) {
+                        return `<strong>${data}</strong>`;
+                    },
+                },
+                {
+                    data: 'customer_name',
+                    name: 'customer_name',
+                },
+                {
+                    data: 'customer_email',
+                    name: 'customer_email',
+                },
+                {
+                    data: 'customer_phone',
+                    name: 'customer_phone',
+                    className: 'text-center',
+                    render: function(data) {
+                        return data ?? "-";
+                    },
+                },
+                {
+                    data: 'shipping_price',
+                    name: 'shipping_price',
+                    className: 'text-right',
+                    render: function(data) {
+                        return data ? data.toLocaleString('ID') : "-";
+                    },
+                },
+                {
+                    data: 'created_at',
+                    name: 'created_at',
+                    render: function(data) {
+                        const dateObject = new Date(data);
+                        const day = dateObject.getDate();
+                        const month = dateObject.toLocaleString('default', {
+                            month: 'long'
+                        });
+                        const year = dateObject.getFullYear();
+                        return `${day} ${month} ${year}`;
+                    },
+                    className: 'text-center' // Kolom created_at akan berada di tengah
+                },
+                {
+                    data: 'status',
+                    name: 'status',
+                    render: function(data) {
+                        const badgeClass = data == 'inprogress' ? 'warning' : 'success';
+                        return `<span class="badge bg-${badgeClass}">${data}</span>`;
+                    },
+                    className: 'text-center'
+                },
+                {
+                    data: 'detail',
+                    name: 'detail',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center' // Kolom detail akan berada di tengah
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    className: 'text-center' // Kolom action akan berada di tengah
+                },
+            ]
+        });
+
+        $(document).on('click', '#btnEdit', function() {
+            Swal.fire({
+                title: 'Anda yakin?',
+                text: "Anda yakin ingin merubah status pesanan ini menjadi selesai?",
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#F46A6A',
+                confirmButtonColor: '#34C38F',
+                confirmButtonText: 'Ya, Ubah',
+                showLoaderOnConfirm: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Memproses Data',
+                        text: 'Tunggu sebentar...',
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        },
+                    });
+
+                    const id = $(this).attr('data-id');
+                    $("input").removeClass('is-invalid');
+
+                    $.ajax({
+                        url: `{{ route('admin.pesanan.edit', '') }}/${id}`,
+                        type: 'GET',
+                        dataType: 'JSON',
+                        success: function(res) {
+                            Swal.close();
+                            var id = $(this).attr('data-id');
+                            var token = $('#editForm input[name="_token"]').val();
+                            $.ajax({
+                                url: "{{ route('admin.pesanan.ubah_status') }}",
+                                type: 'POST',
+                                dataType: 'JSON',
+                                data: {
+                                    id: res.id,
+                                    _token: token,
+                                    status: "done"
+                                },
+                                success: function(res) {
+                                    if (res.success) {
+                                        window.location.href =
+                                            "{{ route('admin.pesanan.list') }}";
+                                    } else {
+                                        Swal.close();
+                                        errorMsg(res.msg);
+                                    }
+                                },
+                                error: function(jqXHR, textStatus,
+                                    errorThrown) {
+                                    Swal.close();
+                                    errorMsg(jqXHR.status + " - " +
+                                        errorThrown);
+                                }
+                            });
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            $("#showModal").modal('hide');
+                            errorMsg(jqXHR.status + " - " + errorThrown);
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endsection

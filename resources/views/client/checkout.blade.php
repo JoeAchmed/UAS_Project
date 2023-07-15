@@ -3,6 +3,7 @@
 @section('additional-css')
     <!-- SPECIFIC CSS -->
     <link href="{{ asset('client/css/checkout.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endsection
 
 @section('nav-type')
@@ -10,11 +11,7 @@
 @endsection
 
 @section('content')
-    @if (request()->query('status') == 'success')
-        @include('client.components.checkout.success')
-    @else
-        @include('client.components.checkout.main')
-    @endif
+    @include('client.components.checkout.main')
     <!-- /container -->
 @endsection
 
