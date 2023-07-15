@@ -38,10 +38,14 @@ Route::group(['middleware' => 'auth-dbo'], function () {
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
     // Produk
     Route::get('/dbo/produk', [DashboardController::class, 'products'])->name('admin.produk.list');
-    Route::post('/dbo/produk', [DashboardController::class, 'product_datas'])->name('admin.produk.datas');
     // Kategori Produk
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categories'])->name('admin.produk.kategori.list');
-    Route::post('/dbo/produk/kategori', [DashboardController::class, 'category_datas'])->name('admin.produk.kategori.datas');
+    Route::get('/dbo/produk/tambah-kategori', [DashboardController::class, 'category_add'])->name('admin.produk.kategori.add');
+    Route::get('/dbo/produk/ubah-kategori/{params:id}', [DashboardController::class, 'category_edit'])->name('admin.produk.kategori.edit');
+    Route::post('/dbo/produk/hapus-kategori', [DashboardController::class, 'category_delete'])->name('admin.produk.kategori.delete');
+
+    Route::post('/dbo/produk/tambah-kategori', [DashboardController::class, 'category_add'])->name('admin.produk.kategori.add');
+    Route::post('/dbo/produk/update-kategori', [DashboardController::class, 'category_update'])->name('admin.produk.kategori.update');
 
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');

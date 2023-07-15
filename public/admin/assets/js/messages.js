@@ -3,7 +3,7 @@ function successMsg(msg) {
 		icon: "success",
 		title: "Berhasil",
 		text: msg,
-		confirmButtonColor: "#3085d6",
+		confirmButtonColor: "#28a745",
 	});
 }
 
