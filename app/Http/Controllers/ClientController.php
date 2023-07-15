@@ -267,11 +267,13 @@ class ClientController extends Controller
      */
     public function orders(Request $request)
     {
-        $orders = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
+        $order_items = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
                 ->join('products', 'order_items.prod_id', '=', 'products.id')
                 ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-                ->select('products.*', 'product_categories.name AS category_name', 'orders.*')
+                ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
+                ->where('orders.user_id', auth()->user()->id)
                 ->get();
+        $orders = OrdersClient::where('user_id', auth()->user()->id)->get();
 
         return view('client.orders', compact('orders'));
     }
@@ -279,11 +281,11 @@ class ClientController extends Controller
     public function checkout(Request $request)
     {
         $cart = CartClient::getUserCart(auth()->user()->id);
-        $cart_items = CartItemClient::getCartItems($cart->id);
+        $cart_items = CartItemClient::getCartItems($cart->id)->where('status', 1);
         $cart_id = $cart->id;
         $subtotal = 0; // Initialize $subtotal variable
 
-        if (!count($cart_items) || $cart_items[0]->status == 0) return redirect('cart')->with('success', 'Silakan Checkout Cart Terlebih Dahulu');
+        if (!count($cart_items)) return redirect('cart')->with('success', 'Silakan Checkout Cart Terlebih Dahulu');
 
         foreach ($cart_items as $item) {
             // Calculate subtotal
@@ -321,11 +323,6 @@ class ClientController extends Controller
         $order->save();
 
         //  Panggil metode createOrderItems
-        $this->createOrderItems($order->id);
-    }
-
-    public function createOrderItems($order_id)
-    {
         $cart_item = CartClient::getUserCart(auth()->user()->id);
         // menampilkan page pesanan admin
         $list_cart = CartItemClient::getCartItems($cart_item->id)->where('status', 1);
@@ -333,7 +330,7 @@ class ClientController extends Controller
         foreach ($list_cart as $item) :
             $order_items = new OrdersItemClient();
 
-            $order_items->order_id = $order_id;
+            $order_items->order_id = $order->id;
             $order_items->prod_id = $item->prod_id;
             $order_items->quantity = $item->quantity;
             if ($item->discount) {
@@ -355,6 +352,6 @@ class ClientController extends Controller
             $cart_items->save();
         endforeach;
 
-        return redirect('orders');
+        return redirect('success');
     }
 }

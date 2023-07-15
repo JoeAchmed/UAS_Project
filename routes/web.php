@@ -44,7 +44,8 @@ Route::group(['middleware' => 'auth-dbo'], function () {
     Route::post('/dbo/produk/kategori', [DashboardController::class, 'category_datas'])->name('admin.produk.kategori.datas');
 
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
-    Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
+    Route::get('/dbo/user/pelanggan', [DashboardController::class, 'usersCustomer'])->name('admin.user.customer');
+    Route::get('/dbo/user/admin', [DashboardController::class, 'usersAdmin'])->name('admin.user.admin');
 });
 
 Route::group(['middleware' => ['auth']], function () {
@@ -57,6 +58,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // orders
     Route::get('/orders', [ClientController::class, 'orders'])->name('orders');
+    Route::get('/success', [ClientController::class, 'orders'])->name('success');
     Route::get('/checkout', [ClientController::class, 'checkout'])->name('checkout');
     Route::post('/orders/create', [ClientController::class, 'createOrder'])->name('create.order');
 

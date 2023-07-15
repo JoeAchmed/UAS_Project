@@ -214,7 +214,7 @@
                             id="shipping_price">
                         <input type="hidden" name="cart_id" value="{{ $cart_id }}"
                         id="cart_id">
-                        <button class="btn-delete" type="submit">
+                        <button class="btn-delete btn_1 full-width" type="submit">
                             <a class="btn_1 full-width">Confirm and
                                 Pay</a>
                         </button>

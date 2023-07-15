@@ -11,13 +11,6 @@
 
 @section('content')
     <div class="container margin_30">
-        @if ($product->discount)
-            <div class="countdown_inner">
-                <span>-{{ number_format($product->discount, 0) }}%</span>
-                This offer ends in
-                <div data-countdown="2019/05/15" class="countdown"></div>
-            </div>
-        @endif
         <div class="row">
             <div class="col-md-6">
                 <div class="all">

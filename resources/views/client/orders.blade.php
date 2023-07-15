@@ -2,7 +2,9 @@
 
 @section('additional-css')
     <!-- SPECIFIC CSS -->
-    <link href="{{ asset('client/css/cart.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/css/checkout.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('client/css/orders.css') }}" rel="stylesheet">
 @endsection
 
 @section('nav-type')
@@ -10,65 +12,25 @@
 @endsection
 
 @section('content')
-    <main class="bg_gray py-lg-5">
-        <div class="container margin_30">
-            <div class="page_header">
-                @component('client.components.breadcrumb')
-                    @section('page-name', 'Orders')
-                @section('page-title', 'Orders')
-            @endcomponent
-        </div>
-        <table class="table table-striped cart-list">
-            <thead>
-                <tr>
-                    <th>
-                        Product
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
-                    <th>
-                        Subtotal
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orders as $item)
-                    <tr>
-                        <td>
-                            <div class="thumb_cart">
-                                <img src="{{ asset('/client/img/products/product_placeholder_square_small.jpg') }}"
-                                    data-src="{{ asset('/client/img/products/shoes/1.jpg') }}" class="lazy"
-                                    alt="Image">
-                            </div>
-                            <span class="item_cart">{{ $item->name }}</span>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-                                <div class="inc button_inc">+</div>
-                                <div class="dec button_inc">-</div>
-                            </div>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td class="options">
-                            <a href="#"><i class="ti-trash"></i></a>
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-</main>
+    @if (request()->is('success'))
+        {{-- Konten khusus ketika route adalah '/success' --}}
+        @include('client.components.orders.success')
+    @else
+        {{-- Konten default atau ketika route bukan '/success' --}}
+        @include('client.components.orders.main')
+    @endif
+    <!-- /container -->
 @endsection
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        // Check if the query parameter 'status' is 'success'
+        if ("{{ request()->is('success') }}") {
+            // After 3 seconds (3000 milliseconds), redirect to '/orders' without the 'status' query parameter
+            setTimeout(function() {
+                window.location.href = "{{ url('orders') }}";
+            }, 2000);
+        }
+    })
+</script>

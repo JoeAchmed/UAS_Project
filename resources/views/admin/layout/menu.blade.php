@@ -57,7 +57,7 @@
           </g>
         </svg>
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">Allia</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -106,11 +106,24 @@
     </li>
 
     <!-- Management User -->
-    <li class="menu-item @if(Request::url() == route('admin.user.list')) active @endif">
-      <a href="{{ url('/dbo/user') }}" class="menu-link">
+    <li class="menu-item @if(Request::url() == route('admin.user.admin') || Request::url() == route('admin.user.customer')) active @endif">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons bx bx-user"></i>
-        <div data-i18n="Analytics">User Management</div>
+        <div data-i18n="Layouts">User Management</div>
       </a>
+
+      <ul class="menu-sub">
+        <li class="menu-item @if(Request::url() == route('admin.user.customer')) active @endif">
+          <a href="{{ route('admin.user.customer') }}" class="menu-link">
+            <div data-i18n="Without menu">User Pelanggan</div>
+          </a>
+        </li>
+        <li class="menu-item @if(Request::url() == route('admin.user.admin')) active @endif">
+          <a href="{{ route('admin.user.admin') }}" class="menu-link">
+            <div data-i18n="Without navbar">User Admin</div>
+          </a>
+        </li>
+      </ul>
     </li>
     
   </ul>

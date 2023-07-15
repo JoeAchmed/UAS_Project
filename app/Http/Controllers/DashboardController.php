@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\ProductCategoryAdmin;
 use Yajra\DataTables\Facades\Datatables;
+use App\Models\OrdersAdmin;
+use App\Models\ProductClient;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -14,7 +16,11 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return view('admin.dashboard');
+        $categories = ProductClient::getCategoryProduct();
+        $orders = OrdersAdmin::getOrders();
+        $total_sales = OrdersAdmin::getTotalSales();
+
+        return view('admin.dashboard', compact(['orders', 'categories', 'total_sales']));
     }
 
     public function login()
@@ -120,10 +126,16 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function users()
+    public function usersCustomer()
     {
         // menampilkan page pesanan admin
-        return view('admin.user.list');
+        return view('admin.user.list-customer');
+    }
+
+    public function usersAdmin()
+    {
+        // menampilkan page pesanan admin
+        return view('admin.user.list-admin');
     }
 
     /**
