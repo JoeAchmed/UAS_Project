@@ -2,7 +2,7 @@
 
 @section('additional-css')
     <!-- SPECIFIC CSS -->
-    <link href="{{ asset('client/css/cart.css') }}" rel="stylesheet">
+    <link href="{{ asset('client/css/orders.css') }}" rel="stylesheet">
 @endsection
 
 @section('nav-type')
@@ -18,57 +18,80 @@
                 @section('page-title', 'Orders')
             @endcomponent
         </div>
-        <table class="table table-striped cart-list">
-            <thead>
-                <tr>
-                    <th>
-                        Product
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
-                    <th>
-                        Subtotal
-                    </th>
-                    <th>
-
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($orders as $item)
+        @if (count($orders))
+            <table class="table table-striped cart-list">
+                <thead>
                     <tr>
-                        <td>
-                            <div class="thumb_cart">
-                                <img src="{{ asset('/client/img/products/product_placeholder_square_small.jpg') }}"
-                                    data-src="{{ asset('/client/img/products/shoes/1.jpg') }}" class="lazy"
-                                    alt="Image">
-                            </div>
-                            <span class="item_cart">{{ $item->name }}</span>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td>
-                            <div class="numbers-row">
-                                <input type="text" value="1" id="quantity_1" class="qty2" name="quantity_1">
-                                <div class="inc button_inc">+</div>
-                                <div class="dec button_inc">-</div>
-                            </div>
-                        </td>
-                        <td>
-                            <strong>$140.00</strong>
-                        </td>
-                        <td class="options">
-                            <a href="#"><i class="ti-trash"></i></a>
-                        </td>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            No.Invoice
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Subtotal
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Detail
+                        </th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($orders as $item)
+                        <tr>
+                            <td>
+                                <div class="thumb_cart">
+                                    <img src="{{ asset('storage') . '/' . $item->thumbnail }}"
+                                        data-src="{{ asset('storage') . '/' . $item->thumbnail }}" class="lazy"
+                                        alt="Image">
+                                </div>
+                                <span class="item_cart">{{ $item->name }}</span>
+                            </td>
+
+                            <td>
+                                <strong>#{{ $item->invoice }}</strong>
+                            </td>
+
+                            <td>
+                                <strong>
+                                    Rp
+                                    @if ($item->discount)
+                                        {{ number_format($item->discount_price, 0, ',', '.') }}
+                                    @else
+                                        {{ number_format($item->sell_price, 0, ',', '.') }}
+                                    @endif
+                                </strong>
+                            </td>
+                            <td>
+                                <strong>{{ $item->quantity }}</strong>
+                            </td>
+                            <td>
+                                <strong>Rp {{ number_format($item->price, 0, ',', '.') }}</strong>
+                            </td>
+                            <td>
+                                <button class="btn btn-warning rounded">{{ $item->status }}</button>
+                            </td>
+                            <td class="options">
+                                <a href="#"><i class="ti-eye"></i></a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        @else
+            @component('client.components.404')
+                @section('desc', 'Keranjang Anda Kosong, Silakan Berbelanja Dulu')
+            @endcomponent
+        @endif
     </div>
 </main>
 @endsection

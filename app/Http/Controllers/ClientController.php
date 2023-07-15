@@ -270,7 +270,7 @@ class ClientController extends Controller
         $orders = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
                 ->join('products', 'order_items.prod_id', '=', 'products.id')
                 ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-                ->select('products.*', 'product_categories.name AS category_name', 'orders.*')
+                ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
                 ->get();
 
         return view('client.orders', compact('orders'));
