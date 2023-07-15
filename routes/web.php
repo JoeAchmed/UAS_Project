@@ -16,31 +16,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/login', function () {
+    return view('auth.login');
+});
+Route::get('/register', function () {
+    return view('auth.register');
+});
+
 // Client
 Route::get('/', [ClientController::class, 'index'])->name('home');
 Route::get('/products', [ClientController::class, 'products']);
 Route::get('/product/detail/{param:slug}', [ClientController::class, 'productDetail'])->name('product_detail');
 
-// auth
-Route::get('/login', function () {
-    return view('auth.login');
-});
+// Admin
+Route::get('/login-dbo', [DashboardController::class, 'login'])->name('admin.login');
+Route::post('/post-login-dbo', [DashboardController::class, 'postLogin'])->name('admin.postLogin');
+Route::post('/logout-dbo', [DashboardController::class, 'logout'])->name('admin.logout');
 
-Route::get('/login-dbo', [DashboardController::class, 'login']);
-Route::post('/post-login-dbo', [DashboardController::class, 'postLogin']);
-
-Route::get('/register', function () {
-    return view('auth.register');
-});
-
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'auth-dbo'], function () {
     // Dashboard
     Route::get('/dbo', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/dbo/produk', [DashboardController::class, 'productList'])->name('admin.produk.list');
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categoryProduct'])->name('admin.produk.kategori');
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/user', [DashboardController::class, 'users'])->name('admin.user.list');
+});
 
+
+Route::group(['middleware' => ['auth']], function () {
     // Client
     // cart
     Route::get('/cart', [ClientController::class, 'carts']);
