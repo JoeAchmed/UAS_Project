@@ -5,57 +5,73 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // menampilkan page dashboard admin
         return view('admin.dashboard');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function login()
     {
-        // show login-dbo
+        if (Session::get('user_id') != null) {
+            return redirect(route('admin.dashboard'));
+        }
         return view('auth.login-dbo');
     }
 
-    /**
-     * POST login admin
-     */
     public function postLogin(Request $request)
     {
-        // show login-dbo
-        // return view('auth.login-dbo');
+        if (Session::get('user_id') != null) {
+            return redirect(route('admin.dashboard'));
+        }
+
         $email = $request->email;
         $password = $request->password;
 
-        // $user = User::where('email', $email)->get();
-        $user = User::where('email', '=', $email)->first();
-        // Hash::check('INPUT PASSWORD', $user->password);
+        $validation = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required'
+        ], [
+            'email.required' => "Input email tidak boleh kosong!",
+            'email.email' => "Format email tidak sesuai!",
+            'password.required' => "Input password tidak boleh kosong!"
+        ]);
 
-        // $hashedPassword = Hash::make($password);
 
-        if ($user->role == 'admin') {
-            
-        }
+        if ($validation->passes()) {
+            $user = User::where('email', '=', $email)->first();
 
-        if (Hash::check($password, $user->password)) {
-            // Password matches
-            // Add your desired logic here
-            dd('ok ');
 
+            if ($user) {
+                if ($user->role == 'admin' || $user->role == 'manager') {
+                    if (Hash::check($password, $user->password)) {
+                        session()->put([
+                            'user_id' => $user->id,
+                            'role' => $user->role
+                        ]);
+                        return response()->json(['success' => true]);
+                    } else {
+                        return response()->json(['success' => false, 'msg' => 'Akun anda tidak terdaftar!']);
+                    }
+                } else {
+                    return response()->json(['success' => false, 'msg' => 'Akun anda tidak terdaftar!']);
+                }
+            } else {
+                return response()->json(['success' => false, 'msg' => 'Akun anda tidak terdaftar!']);
+            }
         } else {
-            // Password does not match
-            // Add your desired logic here
-            dd('gagal ');
+            return response()->json(['err' => $validation->errors()]);
         }
+    }
+
+    public function logout()
+    {
+        session()->flush();
+        return redirect(route('admin.login'));
     }
 
     /**
