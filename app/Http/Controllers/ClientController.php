@@ -272,11 +272,11 @@ class ClientController extends Controller
     public function orders(Request $request)
     {
         $order_items = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
-                ->join('products', 'order_items.prod_id', '=', 'products.id')
-                ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-                ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
-                ->where('orders.user_id', auth()->user()->id)
-                ->get();
+            ->join('products', 'order_items.prod_id', '=', 'products.id')
+            ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+            ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
+            ->where('orders.user_id', auth()->user()->id)
+            ->get();
         $orders = OrdersClient::where('user_id', auth()->user()->id)->get();
 
         return view('client.orders', compact('orders'));
@@ -359,11 +359,24 @@ class ClientController extends Controller
         return redirect('orders.success');
     }
 
-    public function tracking(Request $request) {
+    public function tracking(Request $request)
+    {
         try {
-            $orders = OrdersClient::where('invoice', $request->invoice);
-            
-            return redirect()->route('tracking-order', compact('orders'));
+            // $orders = OrdersClient::where('invoice', $request->invoice)->result();
+
+            // $order_items = OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
+            //     ->join('products', 'order_items.prod_id', '=', 'products.id')
+            //     ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+            //     ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*')
+            //     ->where('orders.user_id', auth()->user()->id)
+            //     ->where('orders.invoice', $request->invoice)
+            //     ->get();
+            $orders = OrdersClient::where('invoice', $request->invoice)->get();
+
+            // dd($orders);
+
+            // return redirect()->route('tracking-order', compact('orders'));
+            return view('client.tracking-order', compact('orders'));
         } catch (Exception $e) {
             return response()->json(['err' => $e]);
         }

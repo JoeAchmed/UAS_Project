@@ -83,7 +83,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     // tracking
     Route::get('/tracking-order', [ClientController::class, 'trackingOrder'])->name('tracking-order');
-    Route::post('/tracking', [ClientController::class, 'tracking'])->name('tracking');
+    Route::post('/tracking-order', [ClientController::class, 'tracking'])->name('tracking');
 });
 
 
