@@ -7,7 +7,6 @@
         @endcomponent
     </div>
     @if (count($orders))
-
         @foreach ($orders as $item)
             <div class="d-flex justify-content-between mb-3">
                 <div class="d-flex align-items-center gap-2">
