@@ -1,7 +1,8 @@
 @extends('admin.layout.appadmin', ['title' => 'User Pelanggan'])
 @section('content')
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ route('admin.user.customer') }}">User Management</a> /</span> User Pelanggan
+<span class="text-muted fw-bold"><a href="{{ route('admin.user.customer') }}">User Management</a> /</span> User
+Pelanggan
 @endsection
 
 <!-- Hoverable Table rows -->
@@ -14,21 +15,23 @@
         </button> --}}
     </div>
     <div class="container mb-3">
-        <table class="table table-hover" id="tableData">
-            <thead>
-                <tr>
-                    <th>User ID</th>
-                    <th>Nama User</th>
-                    <th>Alamat Email</th>
-                    <th>Nomer HP</th>
-                    <th>Tanggal Registrasi</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            </tbody>
-        </table>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover" id="tableData">
+                <thead>
+                    <tr>
+                        <th>User ID</th>
+                        <th>Nama User</th>
+                        <th>Alamat Email</th>
+                        <th>Nomer HP</th>
+                        <th>Tanggal Registrasi</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!--/ Hoverable Table rows -->
@@ -93,7 +96,10 @@
                     searchable: false,
                     className: 'text-center' // Kolom action akan berada di tengah
                 },
-            ]
+            ],
+            drawCallback: function(settings) {
+                $("#tableData").closest('.col-sm-12').addClass("table-responsive");
+            },
         });
 
         $(document).on('click', '#btnDelete', function() {
