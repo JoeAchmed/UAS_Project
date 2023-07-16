@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\ProductCategoryAdmin;
 use Yajra\DataTables\Facades\Datatables;
 use App\Models\OrdersAdmin;
+use App\Models\OrdersItemAdmin;
 use App\Models\ProductAdmin;
 // use App\Models\OrdersItemAdmin;
 use App\Models\ProductClient;
@@ -100,7 +101,7 @@ class DashboardController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="' . route('admin.produk.edit', $row->id) . '" class="btn btn-warning btn-sm btn-sm-action"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" data-id="' . $row->id . '" id="btnDelete"><i class="bx bx-trash"></i></a><form id="deleteForm" action="' . route('admin.produk.kategori.delete') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $actionBtn = '<a href="' . route('admin.produk.edit', $row->id) . '" class="btn btn-warning btn-sm btn-sm-action"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" data-id="' . $row->id . '" id="btnDelete"><i class="bx bx-trash"></i></a><form id="deleteForm" action="' . route('admin.produk.delete') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -127,6 +128,7 @@ class DashboardController extends Controller
             'acq_price' => 'required',
             'sell_price' => 'required',
             'discount' => 'required|gte:0',
+            'stock' => 'required|gte:0',
             'description' => 'required',
             'size' => 'required',
             'weight' => 'required',
@@ -146,6 +148,8 @@ class DashboardController extends Controller
             'sell_price.required' => 'Harga Jual harus diisi.',
             'discount.required' => 'Diskon harus diisi.',
             'discount.gte' => 'Diskon harus lebih besar dari atau sama dengan 0.',
+            'stock.required' => 'Stok harus diisi.',
+            'stock.gte' => 'Stok harus lebih besar dari atau sama dengan 0.',
             'description.required' => 'Deskripsi harus diisi.',
             'size.required' => 'Ukuran harus diisi.',
             'weight.required' => 'Berat harus diisi.',
@@ -153,12 +157,9 @@ class DashboardController extends Controller
         ]);
 
         if ($validate->passes()) {
-            $kategori = ProductCategoryAdmin::where('id', $request->cat_id)->first();
-
-            $prefix = strtoupper(substr($kategori->name, 0, 3));
-            $amount = ProductAdmin::where('cat_id', $request->cat_id)->count();
+            $amount = ProductAdmin::count();
             $amount++;
-            $sku = $prefix . '-' . str_pad($amount, 3, '0', STR_PAD_LEFT);
+            $sku = 'PR' . rand(1000, 9999) . '-' . str_pad($amount, 3, '0', STR_PAD_LEFT);
 
             $thumb = $request->file('thumbnail');
             $thumbName = Str::random(25) . '.' . $thumb->getClientOriginalExtension();
@@ -218,19 +219,19 @@ class DashboardController extends Controller
         $product = ProductAdmin::where('id', $request->id)->first();
 
         ($request->name == $product->name ? $rule_name = 'required' : $rule_name = 'required|unique:products');
-
-        var_dump($request->thumbnail . $request->file('thumbnail'));
-        die;
+        (!$request->file('thumbnail') ? $rule_thumb = 'string' : $rule_thumb = 'required|image|mimes:jpeg,png,jpg,gif');
+        ($request->img_details ? $rule_img = 'nullable' : $rule_img = 'required|image|mimes:jpeg,png,jpg,gif');
 
         $validate = Validator::make($request->all(), [
-            'thumbnail' => 'required|images|mimes:jpeg,png,jpg,gif',
+            'thumbnail' => $rule_thumb,
             'img_details' => 'array|max:5',
-            'img_details.*' => 'required|images|mimes:jpeg,png,jpg,gif',
+            'img_details.*' => $rule_img,
             'name' => $rule_name,
             'cat_id' => 'required',
             'acq_price' => 'required',
             'sell_price' => 'required',
             'discount' => 'required|gte:0',
+            'stock' => 'required|gte:0',
             'description' => 'required',
             'size' => 'required',
             'weight' => 'required',
@@ -250,6 +251,8 @@ class DashboardController extends Controller
             'sell_price.required' => 'Harga Jual harus diisi.',
             'discount.required' => 'Diskon harus diisi.',
             'discount.gte' => 'Diskon harus lebih besar dari atau sama dengan 0.',
+            'stock.required' => 'Stok harus diisi.',
+            'stock.gte' => 'Stok harus lebih besar dari atau sama dengan 0.',
             'description.required' => 'Deskripsi harus diisi.',
             'size.required' => 'Ukuran harus diisi.',
             'weight.required' => 'Berat harus diisi.',
@@ -257,14 +260,89 @@ class DashboardController extends Controller
         ]);
 
         if ($validate->passes()) {
-            $thumb = $request->file('thumbnail');
-            $thumbName = Str::random(25) . '.' . $thumb->getClientOriginalExtension();
-            $thumbPath = 'products/' . $thumbName;
+            $data = $request->all();
 
+            if ($request->file('thumbnail')) {
+                $thumb = $request->file('thumbnail');
+                $thumbName = Str::random(25) . '.' . $thumb->getClientOriginalExtension();
+                $thumbPath = 'products/' . $thumbName;
 
-            dd($thumb);
+                $data['thumbnail'] = $thumbPath;
+
+                Storage::disk('public')->delete($product->thumbnail);
+            } else {
+                $data['thumbnail'] = $product->thumbnail;
+            }
+            $data['slug'] = Str::slug($request->name);
+            $data['acq_price'] = intval(str_replace(".", "", $request->acq_price));
+            $data['sell_price'] = intval(str_replace(".", "", $request->sell_price));
+            $data['discount'] = ($request->discount == 0 ? NULL : $request->discount);
+
+            if ($data['discount']) {
+                $data['discount_price'] = ($data['sell_price'] * $data['discount']) / 100;
+            } else {
+                $data['discount_price'] = 0;
+            }
+
+            $data['updated_at'] = Carbon::now();
+
+            $product->update($data);
+
+            if ($request->file('thumbnail')) {
+                Storage::put('public/products/' . $thumbName, file_get_contents($thumb));
+            }
+            if ($request->img_details) {
+                $files = [];
+                foreach ($product->prodimages as $images) {
+                    $files[] = $images->path;
+                }
+                Storage::disk('public')->delete($files);
+
+                // Cara cepat untuk menghapus menggunakan hasMany
+                $product->prodimages()->delete();
+
+                $imgDetailPaths = [];
+                foreach ($request->file('img_details') as $imgDetail) {
+                    $imgDetailName = Str::random(25) . '.' . $imgDetail->getClientOriginalExtension();
+                    $imgDetailPath = 'products/' . $imgDetailName;
+
+                    Storage::put('public/products/' . $imgDetailName, file_get_contents($imgDetail));
+
+                    $imgDetailPaths[] = $imgDetailPath;
+
+                    $prodImages = new ProductImages();
+                    $prodImages->prod_id = $product->id;
+                    $prodImages->path = $imgDetailPath;
+                    $prodImages->save();
+                }
+            }
+
+            Session::flash('success', 'Produk berhasil diubah!');
+            return response()->json(['success' => true]);
         } else {
             return response()->json(['err' => $validate->errors()]);
+        }
+    }
+
+    public function product_delete(Request $request)
+    {
+        $product = ProductAdmin::where('id', $request->id)->first();
+
+        Storage::disk('public')->delete($product->thumbnail);
+        $files = [];
+        foreach ($product->prodimages as $images) {
+            $files[] = $images->path;
+        }
+        Storage::disk('public')->delete($files);
+
+        // Delete Produk Images
+        $product->prodimages()->delete();
+
+        if ($product->delete()) {
+            Session::flash('success', 'Produk berhasil dihapus!');
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false, 'msg' => 'Produk tidak ada!']);
         }
     }
 
@@ -354,15 +432,7 @@ class DashboardController extends Controller
      */
     public function orders(Request $request)
     {
-        // menampilkan page kategori produk admin
         if ($request->ajax()) {
-            // $data = OrdersItemAdmin::join('orders', 'order_items.order_id', '=', 'orders.id')
-            //     ->join('products', 'order_items.prod_id', '=', 'products.id')
-            //     ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
-            //     ->join('users', 'orders.user_id', '=', 'users.id')
-            //     ->select('order_items.*', 'products.name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*', 'users.name AS customer_name', 'users.email AS customer_email', 'users.phone_number AS customer_phone', 'users.address AS customer_address')
-            //     ->get();
-
             $dataOrders = OrdersAdmin::join('users', 'orders.user_id', '=', 'users.id')
                 ->select('orders.*', 'users.name AS customer_name', 'users.email AS customer_email', 'users.phone_number AS customer_phone', 'users.address AS customer_address')
                 ->get();
@@ -370,18 +440,30 @@ class DashboardController extends Controller
             return Datatables::of($dataOrders)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm" id="btnEdit"><i class="bx bx-edit-alt"></i> Ubah Status</a><form id="editForm" action="' . route('admin.pesanan.ubah_status') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-info btn-sm btn-sm-action" id="btnDetail"><i class="bx bx-show"></i></a> <a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-primary btn-sm btn-sm-action" id="btnEdit"><i class="bx bx-edit-alt"></i></a><form id="editForm" action="' . route('admin.pesanan.ubah_status') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
                     return $actionBtn;
                 })
-                ->addColumn('detail', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" data-id="' . $row->id . '" class="btn btn-info btn-sm" id="btnDetail"><i class="bx bx-show"></i> Lihat</a>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action', 'detail']) // <-- Add the 'detail' column here
+                ->rawColumns(['action']) // <-- Add the 'detail' column here
                 ->make(true);
         }
 
         return view('admin.pesanan.list');
+    }
+
+    public function orders_detail(Request $request, OrdersAdmin $params) {
+        if ($request->ajax()) {
+            $data = OrdersItemAdmin::join('orders', 'order_items.order_id', '=', 'orders.id')
+                ->join('products', 'order_items.prod_id', '=', 'products.id')
+                ->join('product_categories', 'products.cat_id', '=', 'product_categories.id')
+                ->join('users', 'orders.user_id', '=', 'users.id')
+                ->select('order_items.*', 'products.sku', 'products.name AS product_name', 'products.sell_price', 'products.discount_price', 'products.discount', 'products.thumbnail', 'product_categories.name AS category_name', 'orders.*', 'users.name AS customer_name', 'users.email AS customer_email', 'users.phone_number AS customer_phone', 'users.address AS customer_address')
+                ->where('order_id', $params->id)
+                ->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->make(true);
+        }
     }
 
     public function orders_edit(OrdersAdmin $params)

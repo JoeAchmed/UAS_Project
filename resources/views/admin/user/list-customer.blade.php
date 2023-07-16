@@ -1,14 +1,17 @@
 @extends('admin.layout.appadmin', ['title' => 'User Pelanggan'])
 @section('content')
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / <a
-            href="{{ route('admin.user.customer') }}">User</a> /</span> User Pelanggan
+    <span class="text-muted fw-bold"><a href="{{ route('admin.user.customer') }}">User Management</a> /</span> User Pelanggan
 @endsection
 
 <!-- Hoverable Table rows -->
 <div class="card">
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="card-header">Data List Pelanggan</h5>
+        {{-- <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
+            <i class="menu-icon tf-icons bx bx-plus"></i>
+            Tambah
+        </button> --}}
     </div>
     <div class="container mb-3">
         <table class="table table-hover" id="tableData">

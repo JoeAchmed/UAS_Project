@@ -21,7 +21,9 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>SKU</th>
                         <th>Nama</th>
+                        <th>Harga</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -45,10 +47,19 @@
             serverSide: true,
             ajax: "{{ route('admin.produk.list') }}",
             columns: [
-                {data: 'DT_RowIndex', orderable: false, searchable: false},
+                {data: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center'},
+                {data: 'sku', name: 'sku', className: 'text-center'},
                 {data: 'name', name: 'name'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+                {data: 'sell_price', name: 'sell_price', className: 'text-end',
+                    render: function(data) {
+                        return "Rp. " + data.toLocaleString('ID');
+                    },
+                },
+                {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
+            ],
+            drawCallback: function(settings) {
+                $("#tableData").closest('.col-sm-12').addClass("table-responsive");
+            },
         });
 
         $("#btnAdd").on("click", function() {
@@ -82,7 +93,7 @@
                     var id = $(this).attr('data-id');
 
                     $.ajax({
-                        url: "{{ route('admin.produk.kategori.delete') }}",
+                        url: "{{ route('admin.produk.delete') }}",
                         type: 'POST',
                         dataType: 'JSON',
                         data: {
@@ -91,7 +102,7 @@
                         },
                         success: function(res) {
                             if (res.success) {
-                                window.location.href = "{{ route('admin.produk.kategori.list') }}";
+                                window.location.href = "{{ route('admin.produk.list') }}";
                             } else {
                                 Swal.close();
                                 errorMsg(res.msg);

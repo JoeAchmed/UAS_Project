@@ -1,8 +1,7 @@
 @extends('admin.layout.appadmin', ['title' => 'User Admin'])
 @section('content')
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / <a
-            href="{{ route('admin.user.admin') }}">User</a> /</span> User Admin
+    <span class="text-muted fw-bold"><a href="{{ route('admin.user.admin') }}">User Management</a> /</span> User Pelanggan
 @endsection
 
 <!-- Hoverable Table rows -->

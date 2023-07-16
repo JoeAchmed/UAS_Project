@@ -32,4 +32,9 @@ class ProductAdmin extends Model
         $alldata = DB::table('product_categories')->get();
         return $alldata;
     }
+
+    public function prodimages()
+    {
+        return $this->hasMany(ProductImages::class, 'prod_id');
+    }
 }
