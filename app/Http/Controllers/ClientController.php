@@ -356,7 +356,7 @@ class ClientController extends Controller
             $cart_items->save();
         endforeach;
 
-        return redirect('orders.success');
+        return redirect('success');
     }
 
     public function tracking(Request $request)

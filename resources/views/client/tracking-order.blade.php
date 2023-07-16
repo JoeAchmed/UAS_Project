@@ -13,7 +13,7 @@ inner
 <main class="bg_gray">
     <div id="stick_here"></div>
 
-    <div id="track_order">
+    <div id="track_order" style="overflow-y: auto; min-height: 80vh;">
         <div class="container">
             <div class="row justify-content-center text-center">
                 <div class="col-xl-7 col-lg-9">
