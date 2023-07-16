@@ -489,7 +489,7 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function usersCustomer(Request $request)
+    public function users_customer(Request $request)
     {
         // menampilkan page kategori produk admin
         if (Session::get('role') !== "manager") return redirect()->route('admin.produk.list');
@@ -500,30 +500,63 @@ class DashboardController extends Controller
 
             return Datatables::of($data)
                 ->addIndexColumn()
-                // ->addColumn('action', function ($row) {
-                //     $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm btn-sm-action" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" id="btnDelete"><i class="bx bx-trash"></i></a>';
-                //     return $actionBtn;
-                // })
-                // ->rawColumns(['action'])
+                ->addColumn('action', function ($row) {
+                    $deactivateBtn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete" data-id="' . $row->id . '" ><i class="bx bx-block"></i></a><form id="deleteForm" action="' . route('admin.deactivate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $activatenBtn ='<a href="javascript:void(0)" class="btn btn-success btn-sm" id="btnActivate" data-id="' . $row->id . '" ><i class="bx bx-lock-open"></i></a><form id="activateForm" action="' . route('admin.activate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+
+                    return $row->status ? $deactivateBtn : $activatenBtn;
+                })
+                ->rawColumns(['action'])
                 ->make(true);
         }
 
         return view('admin.user.list-customer');
     }
 
-    public function usersAdmin(Request $request)
+    public function deactivate_account(Request $request)
+    {
+        try {
+            $data = User::find($request->id);
+            $data->status = 0;
+
+            $data->save();
+
+            Session::flash('success', 'User berhasil dinonaktifkan!');
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            return response()->json(['err' => $e]);
+        }
+    }
+
+    public function activate_account(Request $request)
+    {
+        try {
+            $data = User::find($request->id);
+            $data->status = 1;
+
+            $data->save();
+
+            Session::flash('success', 'User berhasil diaktifkan kembali!');
+            return response()->json(['success' => true]);
+        } catch (Exception $e) {
+            return response()->json(['err' => $e]);
+        }
+    }
+
+    public function users_admin(Request $request)
     {
         if (Session::get('role') !== "manager") return redirect()->route('admin.produk.list');
 
+        $roles = ['admin', 'manager'];
+        $data = User::select('*')->whereIn('role', $roles)->get();
+
         // menampilkan page kategori produk admin
         if ($request->ajax()) {
-            $roles = ['admin', 'manager'];
-            $data = User::select('*')->whereIn('role', $roles)->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm btn-sm-action" id="btnEdit"><i class="bx bx-edit-alt"></i></a> <a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" id="btnDelete"><i class="bx bx-trash"></i></a>';
+                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit" data-id="' . $row->id . '"><i class="bx bx-edit-alt"></i></a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
@@ -533,6 +566,87 @@ class DashboardController extends Controller
         return view('admin.user.list-admin');
     }
 
+    public function create_user_admin(Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+            'role' => 'required|in:admin,manager,pelanggan',
+        ], [
+            'name.required' => 'Nama User harus diisi.',
+            'email.required' => 'Email User harus diisi dan belum pernah terdaftar.',
+            'password.required' => 'Password harus diisi.',
+            'role.required' => 'Role Harus diisi.',
+        ]);
+
+        if ($validate->passes()) {
+            // Buat pengguna baru
+            $user = new User();
+
+            $user_exist = User::where('email', $request->email)->first();
+
+            if ($user_exist) {
+                return response()->json(['success' => false, 'msg' => 'User dengan email tersebut sudah terdaftar!']);
+            }
+            if ($request->image_url) {
+                $image_path = Str::random(25) . '.' . $request->file('image_url')->getClientOriginalExtension();
+
+                Storage::put('public/users/' . $image_path, file_get_contents($request->file('image_url')));
+                $user->image_url = '/users/thumbnail-' . $image_path;
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->phone_number = $request->phone_number;
+            $user->address = $request->address;
+            $user->role = $request->role;
+            // Simpan pengguna baru ke dalam database
+            $user->save();
+
+            Session::flash('success', 'Produk berhasil ditambahkan!');
+            return view('admin.user.list-admin');
+        } else {
+            return response()->json(['err' => $validate->errors()]);
+        }
+    }
+
+    public function update_user_admin(Request $request)
+    {
+        try {
+            $user = User::find($request->params);
+            if ($request->image_url && $request->file) {
+                $image_path = Str::random(25) . '.' . $request->file('image_url')->getClientOriginalExtension();
+
+                Storage::put('public/users/' . $image_path, file_get_contents($request->file('image_url')));
+                $user->image_url = '/users/thumbnail-' . $image_path;
+            }
+
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->phone_number = $request->phone_number;
+            $user->address = $request->address;
+            $user->role = $request->role;
+            // Simpan pengguna baru ke dalam database
+            $user->save();
+
+            Session::flash('success', 'Produk berhasil diubah!');
+            return view('admin.user.list-admin');
+        } catch (Exception $e) {
+            return response()->json(['err' => $e]);
+        }
+    }
+
+    public function get_data_user(Request $request)
+    {
+        try {
+            $user = User::find($request->params);
+            return response()->json(['success' => true, "data" => $user]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'msg' => 'Kategori tidak ada!']);
+        }
+    }
     /**
      * Show the form for creating a new resource.
      */

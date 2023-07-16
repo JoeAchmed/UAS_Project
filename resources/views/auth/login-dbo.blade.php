@@ -50,12 +50,12 @@
                         </g>
                     </svg>
                 </span>
-                <span class="app-brand-text demo text-body text-capitalize fw-bolder">Allia Store</span>
+                <span class="app-brand-text demo menu-text fw-bolder text-capitalize ms-2">Allaia Store</span>
             </a>
         </div>
         <!-- /Logo -->
         <h4 class="mb-2">Selamat Datang</h4>
-        <p class="mb-4">Masuk dengan dengan akun anda</p>
+        <p class="mb-4">Silakan masuk dengan akun anda</p>
 
         <form id="form" method="POST">
             @csrf
