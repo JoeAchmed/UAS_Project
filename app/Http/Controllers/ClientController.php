@@ -9,6 +9,7 @@ use App\Models\OrdersItemClient;
 use App\Models\ProductClient;
 use App\Models\ProductColor;
 use App\Models\ProductImages;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Date;
@@ -356,5 +357,15 @@ class ClientController extends Controller
         endforeach;
 
         return redirect('orders.success');
+    }
+
+    public function tracking(Request $request) {
+        try {
+            $orders = OrdersClient::where('invoice', $request->invoice);
+            
+            return redirect()->route('tracking-order', compact('orders'));
+        } catch (Exception $e) {
+            return response()->json(['err' => $e]);
+        }
     }
 }
