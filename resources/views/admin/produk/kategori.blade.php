@@ -3,7 +3,7 @@
 
 @section('title')
 <span class="text-muted fw-bold"><a href="{{ route('admin.produk.list') }}">Produk</a>
-        /</span> List Kategori Produk
+    /</span> List Kategori Produk
 @endsection
 
 <!-- Hoverable Table rows -->
@@ -16,17 +16,19 @@
         </button>
     </div>
     <div class="container mb-3">
-        <table class="table table-hover" id="tableData">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody class="table-border-bottom-0">
-            </tbody>
-        </table>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover" id="tableData">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <!--/ Hoverable Table rows -->
@@ -79,10 +81,13 @@
             serverSide: true,
             ajax: "{{ route('admin.produk.kategori.list') }}",
             columns: [
-                {data: 'DT_RowIndex', orderable: false, searchable: false},
+                {data: 'DT_RowIndex', orderable: false, searchable: false, className: 'text-center'},
                 {data: 'name', name: 'name'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+                {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
+            ],
+            drawCallback: function(settings) {
+                $("#tableData").closest('.col-sm-12').addClass("table-responsive");
+            },
         });
 
         $("#btnAdd").on("click", function() {

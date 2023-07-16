@@ -1,18 +1,17 @@
 @extends('admin.layout.appadmin', ['title' => 'User Pelanggan'])
 @section('content')
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / <a
-            href="{{ route('admin.user.customer') }}">User</a> /</span> User Pelanggan
+    <span class="text-muted fw-bold"><a href="{{ route('admin.user.customer') }}">User Management</a> /</span> User Pelanggan
 @endsection
 
 <!-- Hoverable Table rows -->
 <div class="card">
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="card-header">Data List Pelanggan</h5>
-        <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
+        {{-- <button type="button" class="btn btn-primary mx-4" style="max-height: 42px">
             <i class="menu-icon tf-icons bx bx-plus"></i>
             Tambah
-        </button>
+        </button> --}}
     </div>
     <div class="container mb-3">
         <table class="table table-hover" id="tableData">
@@ -23,7 +22,7 @@
                     <th>Alamat Email</th>
                     <th>Nomer HP</th>
                     <th>Tanggal Registrasi</th>
-                    <th>Aksi</th>
+                    {{-- <th>Aksi</th> --}}
                 </tr>
             </thead>
             <tbody class="table-border-bottom-0">
@@ -77,13 +76,13 @@
                     },
                     className: 'text-center' // Kolom created_at akan berada di tengah
                 },
-                {
-                    data: 'action',
-                    name: 'action',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center' // Kolom action akan berada di tengah
-                },
+                // {
+                //     data: 'action',
+                //     name: 'action',
+                //     orderable: false,
+                //     searchable: false,
+                //     className: 'text-center' // Kolom action akan berada di tengah
+                // },
             ]
         });
     });

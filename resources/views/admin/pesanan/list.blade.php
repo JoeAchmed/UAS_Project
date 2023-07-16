@@ -1,7 +1,7 @@
 @extends('admin.layout.appadmin', ['title' => 'Daftar Pesanan'])
 @section('content')
 @section('title')
-    <span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / </span> Pesanan
+<span class="text-muted fw-bold"><a href="{{ url('/dbo') }}">Dashboard</a> / </span> List Pesanan
 @endsection
 
 <!-- Hoverable Table rows -->
@@ -18,15 +18,9 @@
                         <th>Nama Pembeli</th>
                         <th>Email</th>
                         <th>Nomer HP</th>
-                        {{-- <th>Nama Produk</th> --}}
-                        {{-- <th>Harga Awal</th> --}}
-                        {{-- <th>Discount</th> --}}
-                        {{-- <th>Harga Akhir</th> --}}
-                        {{-- <th>Jumlah Barang</th> --}}
                         <th>Subtotal</th>
                         <th>Tanggal Transaksi</th>
                         <th>Status Pesanan</th>
-                        <th>Detail Pesanan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -65,17 +59,40 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalDetail" tabindex="-1" data-bs-keyboard="false" data-bs-backdrop="static"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetailTitle">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover" id="tableDetails">
+                    <thead>
+                        <tr>
+                            <th>SKU</th>
+                            <th>Nama Produk</th>
+                            <th>Quantity</th>
+                            <th>Total Harga</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!--/ Hoverable Table rows -->
 @endsection
 @section('js')
 <script>
     var tableData;
+    var tableDetails;
 
     $(function($) {
-        $("input").on('keypress', function() {
-            $(this).removeClass('is-invalid');
-        });
-
         tableData = $('#tableData').DataTable({
             processing: true,
             serverSide: true,
@@ -136,20 +153,16 @@
                     className: 'text-center'
                 },
                 {
-                    data: 'detail',
-                    name: 'detail',
-                    orderable: false,
-                    searchable: false,
-                    className: 'text-center' // Kolom detail akan berada di tengah
-                },
-                {
                     data: 'action',
                     name: 'action',
                     orderable: false,
                     searchable: false,
                     className: 'text-center' // Kolom action akan berada di tengah
                 },
-            ]
+            ],
+            drawCallback: function(settings) {
+                $("#tableData").closest('.col-sm-12').addClass("table-responsive");
+            },
         });
 
         $(document).on('click', '#btnEdit', function() {
@@ -183,7 +196,6 @@
                         type: 'GET',
                         dataType: 'JSON',
                         success: function(res) {
-                            Swal.close();
                             var id = $(this).attr('data-id');
                             var token = $('#editForm input[name="_token"]').val();
                             $.ajax({
@@ -197,8 +209,7 @@
                                 },
                                 success: function(res) {
                                     if (res.success) {
-                                        window.location.href =
-                                            "{{ route('admin.pesanan.list') }}";
+                                        window.location.href = "{{ route('admin.pesanan.list') }}";
                                     } else {
                                         Swal.close();
                                         errorMsg(res.msg);
@@ -207,8 +218,7 @@
                                 error: function(jqXHR, textStatus,
                                     errorThrown) {
                                     Swal.close();
-                                    errorMsg(jqXHR.status + " - " +
-                                        errorThrown);
+                                    errorMsg(jqXHR.status + " - " + errorThrown);
                                 }
                             });
                         },
@@ -219,6 +229,50 @@
                     });
                 }
             });
+        });
+
+        $(document).on('click', '#btnDetail', function() {
+            var id = $(this).attr('data-id');
+
+            $("#modalDetail").modal('show');
+            $("#modalDetailTitle").text("Detail Items Order");
+
+            tableDetails = $('#tableDetails').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: `{{ route('admin.pesanan.detail', '')}}/${id}`,
+                columns: [
+                    {
+                        data: 'sku',
+                        name: 'sku',
+                        className: 'text-center',
+
+                    },
+                    {
+                        data: 'product_name',
+                        name: 'product_name',
+                    },
+                    {
+                        data: 'quantity',
+                        name: 'quantity',
+                        className: 'text-center'
+                    },
+                    {
+                        data: 'price',
+                        name: 'price',
+                        className: 'text-right',
+                        render: function(data) {
+                            return data ? data.toLocaleString('ID') : "-";
+                        },
+                    },
+                ]
+            });
+        });
+
+        $('#modalDetail').on('hidden.bs.modal', function() {
+            if (tableDetails) {
+                tableDetails.destroy();
+            }
         });
     });
 </script>

@@ -46,18 +46,19 @@ Route::group(['middleware' => 'auth-dbo:admin-manager'], function () {
     Route::post('/dbo/produk/tambah', [DashboardController::class, 'product_create'])->name('admin.produk.create');
     Route::get('/dbo/produk/ubah/{params:id}', [DashboardController::class, 'product_edit'])->name('admin.produk.edit');
     Route::post('/dbo/produk/update', [DashboardController::class, 'product_update'])->name('admin.produk.update');
+    Route::post('/dbo/produk/hapus', [DashboardController::class, 'product_delete'])->name('admin.produk.delete');
 
     // Kategori Produk
     Route::get('/dbo/produk/kategori', [DashboardController::class, 'categories'])->name('admin.produk.kategori.list');
     Route::get('/dbo/produk/tambah-kategori', [DashboardController::class, 'category_add'])->name('admin.produk.kategori.add');
     Route::get('/dbo/produk/ubah-kategori/{params:id}', [DashboardController::class, 'category_edit'])->name('admin.produk.kategori.edit');
-    Route::post('/dbo/produk/hapus-kategori', [DashboardController::class, 'category_delete'])->name('admin.produk.kategori.delete');
-
     Route::post('/dbo/produk/tambah-kategori', [DashboardController::class, 'category_add'])->name('admin.produk.kategori.add');
     Route::post('/dbo/produk/update-kategori', [DashboardController::class, 'category_update'])->name('admin.produk.kategori.update');
+    Route::post('/dbo/produk/hapus-kategori', [DashboardController::class, 'category_delete'])->name('admin.produk.kategori.delete');
 
     Route::get('/dbo/pesanan', [DashboardController::class, 'orders'])->name('admin.pesanan.list');
     Route::get('/dbo/pesanan/ubah-pesanan/{params:id}', [DashboardController::class, 'orders_edit'])->name('admin.pesanan.edit');
+    Route::get('/dbo/pesanan/detail/{params:id}', [DashboardController::class, 'orders_detail'])->name('admin.pesanan.detail');
     Route::post('/dbo/produk/ubah-pesanan', [DashboardController::class, 'update_status_order'])->name('admin.pesanan.ubah_status');
 });
 

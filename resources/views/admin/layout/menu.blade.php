@@ -72,7 +72,7 @@
         {{-- Batasi pages2 product management hanya untuk admin & manager --}}
         @if ($role == 'admin' || $role == 'manager')
             <!-- Product -->
-            <li class="menu-item @if (Request::url() == route('admin.produk.kategori.list') || Request::url() == route('admin.produk.list')) ) active @endif">
+            <li class="menu-item @if (Request::url() == route('admin.produk.kategori.list') || Request::url() == route('admin.produk.list') || Request::url() == route('admin.produk.add')) active @endif">
                 <a href="javascript:void(0);" class="menu-link menu-toggle">
                     <i class="menu-icon tf-icons bx bx-store"></i>
                     <div data-i18n="Layouts">Produk</div>
@@ -84,7 +84,7 @@
                             <div data-i18n="Without menu">Kategori Produk</div>
                         </a>
                     </li>
-                    <li class="menu-item @if (Request::url() == route('admin.produk.list')) active @endif">
+                    <li class="menu-item @if (Request::url() == route('admin.produk.list') || Request::url() == route('admin.produk.add')) active @endif">
                         <a href="{{ url('/dbo/produk') }}" class="menu-link">
                             <div data-i18n="Without navbar">List Produk</div>
                         </a>

@@ -50,7 +50,7 @@
                         </g>
                     </svg>
                 </span>
-                <span class="app-brand-text demo text-body fw-bolder">Allia Store</span>
+                <span class="app-brand-text demo text-body text-capitalize fw-bolder">Allia Store</span>
             </a>
         </div>
         <!-- /Logo -->

@@ -14,7 +14,7 @@
     <div class="container mb-3">
         <form autocomplete="off" id="form" enctype="multipart/form-data">
             @csrf
-            <input type="text" name="id" id="id" value="{{ (isset($product) ? $product->id : '') }}">
+            <input type="hidden" name="id" id="id" value="{{ (isset($product) ? $product->id : '') }}">
             <div class="mb-3">
                 <label for="name" class="form-label">Thumbnail</label>
                 <input type="file" accept="image/*" class="form-control" name="thumbnail" id="thumbnail">
@@ -82,11 +82,25 @@
                     </div>
                 </div>
             </div>
-            <div class="mb-3">
-                <label for="discount" class="form-label">Diskon (%)</label>
-                <input type="number" class="form-control" name="discount"
-                    value="{{ (isset($product) ? (!$product->discount ? '0' : floor($product->discount)) : '0') }}" min="0"
-                    id="discount" placeholder="Diskon (%)" />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="discount" class="form-label">Diskon (%)</label>
+                        <input type="number" class="form-control" name="discount"
+                            value="{{ (isset($product) ? (!$product->discount ? '0' : floor($product->discount)) : '0') }}"
+                            min="0" id="discount" placeholder="Diskon (%)" />
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stok</label>
+                        <input type="number" class="form-control" name="stock"
+                            value="{{ (isset($product) ? $product->stock : '0') }}"
+                            min="0" id="stock" placeholder="Stok" />
+                    </div>
+                </div>
             </div>
 
             <div class="mb-3">
@@ -205,11 +219,13 @@
                 let token = $("input[name='_token']").val();
                 let id = $("input[name='id']").val();
                 let thumbnail = $("input[name='thumbnail']").val();
+                let sku = $("input[name='sku']").val();
                 let name = $("input[name='name']").val();
                 let cat_id = $("select[name='cat_id']").val();
                 let acq_price = $("input[name='acq_price']").val();
                 let sell_price = $("input[name='sell_price']").val();
                 let discount = $("input[name='discount']").val();
+                let stock = $("input[name='stock']").val();
                 let description = $("textarea[name='description']").val();
                 let size = $("input[name='size']").val();
                 let weight = $("input[name='weight']").val();
@@ -219,11 +235,13 @@
                 formData.append('_token', token);
                 formData.append('id', id);
                 formData.append('thumbnail', $('#thumbnail')[0].files[0]);
+                formData.append('sku', sku);
                 formData.append('name', name);
                 formData.append('cat_id', cat_id);
                 formData.append('acq_price', acq_price);
                 formData.append('sell_price', sell_price);
                 formData.append('discount', discount);
+                formData.append('stock', stock);
                 formData.append('description', description);
                 formData.append('size', size);
                 formData.append('weight', weight);
