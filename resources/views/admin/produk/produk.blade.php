@@ -24,6 +24,7 @@
                         <th>SKU</th>
                         <th>Nama</th>
                         <th>Harga</th>
+                        <th>Stok</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -55,6 +56,7 @@
                         return "Rp. " + data.toLocaleString('ID');
                     },
                 },
+                {data: 'stock', name: 'stock', className: 'text-center'},
                 {data: 'action', name: 'action', orderable: false, searchable: false, className: 'text-center'},
             ],
             drawCallback: function(settings) {

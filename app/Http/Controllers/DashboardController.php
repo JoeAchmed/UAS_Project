@@ -173,7 +173,7 @@ class DashboardController extends Controller
             $data['sell_price'] = intval(str_replace(".", "", $request->sell_price));
             $data['discount'] = ($request->discount == 0 ? NULL : $request->discount);
             if ($data['discount']) {
-                $data['discount_price'] = ($data['sell_price'] * $data['discount']) / 100;
+                $data['discount_price'] = $data['sell_price'] - ($data['sell_price'] * $data['discount']) / 100;
             }
             $data['created_at'] = Carbon::now();
 
@@ -279,7 +279,7 @@ class DashboardController extends Controller
             $data['discount'] = ($request->discount == 0 ? NULL : $request->discount);
 
             if ($data['discount']) {
-                $data['discount_price'] = ($data['sell_price'] * $data['discount']) / 100;
+                $data['discount_price'] = $data['sell_price'] - ($data['sell_price'] * $data['discount']) / 100;
             } else {
                 $data['discount_price'] = 0;
             }

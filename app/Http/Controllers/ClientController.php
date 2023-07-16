@@ -26,7 +26,6 @@ class ClientController extends Controller
         $produk = ProductClient::join('product_categories', 'products.cat_id', '=', 'product_categories.id')
             ->select('products.*', 'product_categories.name AS category_name')
             ->get();
-
         return view('client.home', compact('produk'));
     }
 

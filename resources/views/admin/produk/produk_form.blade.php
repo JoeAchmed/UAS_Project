@@ -1,15 +1,15 @@
-@extends('admin.layout.appadmin', ['title' => 'Tambah Produk'])
+@extends('admin.layout.appadmin', ['title' => ''.(isset($product) ? "Ubah" : "Tambah").' Produk'])
 @section('content')
 
 @section('title')
 <span class="text-muted fw-bold"><a href="{{ route('admin.produk.list') }}">Produk</a>
-    / <a href="{{ route('admin.produk.list') }}">List Produk</a> / </span> Tambah
+    / <a href="{{ route('admin.produk.list') }}">List Produk</a> / </span> {{ (isset($product) ? "Ubah" : "Tambah") }}
 @endsection
 
 <!-- Hoverable Table rows -->
 <div class="card">
     <div class="d-flex justify-content-between align-items-center">
-        <h5 class="card-header">Tambah Produk</h5>
+        <h5 class="card-header">{{ (isset($product) ? "Ubah" : "Tambah") }} Produk</h5>
     </div>
     <div class="container mb-3">
         <form autocomplete="off" id="form" enctype="multipart/form-data">

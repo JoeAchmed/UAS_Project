@@ -43,6 +43,20 @@ inner
         </div>
         @endif
 
+        {{-- <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center gap-2">
+                <strong>Belanja</strong>
+                {{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}
+                <span
+                    class="badge text-bg-{{ $item->status == 'success' ? 'success' : 'warning' }}">{{ $item->status }}</span>
+                <strong class="text-muted">#{{ $item->invoice }}</strong>
+            </div>
+            <button class="btn btn-primary">
+                <a href="#"><i class="ti-print"></i></a>
+                Cetak
+            </button>
+        </div> --}}
+
         @foreach ($orders as $item)
         @php
         $order_items = App\Models\OrdersItemClient::join('orders', 'order_items.order_id', '=', 'orders.id')
