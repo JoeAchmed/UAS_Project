@@ -1,4 +1,4 @@
-@extends('auth.layout.main', ['title' => 'Daftar Pesanan'])
+@extends('auth.layout.main', ['title' => 'Login'])
 @section('content')
     <!-- Login -->
     <div class="card">
@@ -105,7 +105,7 @@
             <p class="text-center">
                 <span>Anda pengguna baru ?</span>
                 <a href="{{ url('/register') }}">
-                    <span>buat akun</span>
+                    <span>Buat Akun</span>
                 </a>
             </p>
         </div>

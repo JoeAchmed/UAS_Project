@@ -501,8 +501,8 @@ class DashboardController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $deactivateBtn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm" id="btnDelete" data-id="' . $row->id . '" ><i class="bx bx-block"></i></a><form id="deleteForm" action="' . route('admin.deactivate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
-                    $activatenBtn ='<a href="javascript:void(0)" class="btn btn-success btn-sm" id="btnActivate" data-id="' . $row->id . '" ><i class="bx bx-lock-open"></i></a><form id="activateForm" action="' . route('admin.activate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $deactivateBtn = '<a href="javascript:void(0)" class="btn btn-danger btn-sm btn-sm-action" id="btnDelete" data-id="' . $row->id . '" ><i class="bx bx-block"></i></a><form id="deleteForm" action="' . route('admin.deactivate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
+                    $activatenBtn ='<a href="javascript:void(0)" class="btn btn-success btn-sm btn-sm-action" id="btnActivate" data-id="' . $row->id . '" ><i class="bx bx-lock-open"></i></a><form id="activateForm" action="' . route('admin.activate.customer') . '" method="POST" class="d-none">' . csrf_field() . '</form>';
 
                     return $row->status ? $deactivateBtn : $activatenBtn;
                 })
@@ -556,7 +556,7 @@ class DashboardController extends Controller
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm" id="btnEdit" data-id="' . $row->id . '"><i class="bx bx-edit-alt"></i></a>';
+                    $actionBtn = '<a href="javascript:void(0)" class="btn btn-warning btn-sm btn-sm-action" id="btnEdit" data-id="' . $row->id . '"><i class="bx bx-edit-alt"></i></a>';
                     return $actionBtn;
                 })
                 ->rawColumns(['action'])
